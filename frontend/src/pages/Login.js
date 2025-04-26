@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import API from '../api/api';
 import { useNavigate } from 'react-router-dom';
-import './LoginRegister.css';
+import '../styles/Styles.css';
  
 export default function Login() {
   const navigate = useNavigate();
@@ -16,11 +16,20 @@ export default function Login() {
     try {
       const res = await API.post('login/', credentials);
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('role', res.data.role);
+      localStorage.setItem('username', res.data.username);
       alert("✅ Logged in successfully!");
-      navigate('/check-product');
+      
+      if (res.data.role === 'customer') {
+        navigate('/customer-dashboard');
+      } else if (res.data.role === 'seller') {
+        navigate('/seller-dashboard');
+      } else {
+        alert("❌ Invalid role. Please contact support.");
+      }
     } catch (err) {
       console.error(err);
-      alert("❌ Login failed. Check your credentials."); 
+      alert(`❌ Login failed. Check your credentials ${err}`); 
     }
   };
 
