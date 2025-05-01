@@ -17,7 +17,7 @@ export default function SellerDashboard() {
         label: 'Sales ($)',
         data: [1200, 1900, 3000, 2500, 4000, 3500],
         backgroundColor: 'rgba(59, 130, 246, 0.5)',
-        borderColor: 'rgba(59, 130, 246, 1)',
+        borderColor: 'rgb(8, 40, 90)',
         borderWidth: 1,
       },
     ],
@@ -79,7 +79,7 @@ export default function SellerDashboard() {
         </div>
 
         {/* Sales Chart */}
-        <div className="bg-white p-4 rounded-lg shadow-md animate__animated animate__slideInLeft">
+        <div className="bg-white p-8 rounded-lg shadow-md animate__animated animate__slideInLeft">
           <h2 className="text-lg font-semibold mb-3">Your Sales Overview</h2>
           <Bar data={salesData} options={chartOptions} />
         </div>

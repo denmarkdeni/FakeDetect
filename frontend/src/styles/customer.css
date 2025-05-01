@@ -1,0 +1,265 @@
+/* CustomerDashboard.css */
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+.dashboard-subtext {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: linear-gradient(1deg, #90a5b9, #4642cfab);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.card-text {
+  font-size: 14px;
+  color: #666;
+}
+
+.alert-box {
+  background-color: #fff6f6;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.tip-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.tip-list li::before {
+  content: "💡 ";
+  margin-right: 8px;
+}
+
+/* Reset some base styles */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container for the entire product section */
+.customer-products-container {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background-color: #f4f4f4;
+}
+
+/* Title */
+.customer-products-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Grid for product cards */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Product card */
+.product-card {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+.product-info {
+  padding: 15px;
+  background: linear-gradient(270deg, #9ba5d7, #5fd9be2e);
+}
+
+.product-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.product-brand {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  color: #0a8d48;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.product-description {
+  font-size: 0.85rem;
+  color: #555;
+  height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-badges {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.badge {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 15px;
+  text-transform: uppercase;
+}
+
+.badge-genuine {
+  background-color: #e0f7e9;
+  color: #0f9d58;
+}
+
+.badge-fake {
+  background-color: #ffe5e5;
+  color: #d93025;
+}
+
+.product-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
+.product-link:hover {
+  color: #0b57d0;
+}
+
+.product-details-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 40px;
+  background: linear-gradient(45deg, #19648138, #59ab8a14);
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.product-img img {
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-infos {
+  max-width: 500px;
+  font-family: "Arial", sans-serif;
+}
+
+.product-info h2 {
+  margin-bottom: 10px;
+}
+
+.product-info p {
+  margin: 8px 0;
+}
+
+.product-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.btn-add,
+.btn-buy,
+.btn-flag {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.btn-add {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-add:hover {
+  background-color: #1c4f86;
+}
+
+.btn-buy {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-buy:hover {
+  background-color: #19640f;
+}
+
+.btn-flag {
+  background-color: #f5450f;
+  color: white;
+}
+
+.btn-flag:hover {
+  background-color: #80360c;
+}

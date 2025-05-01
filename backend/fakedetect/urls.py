@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from api_app import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +27,14 @@ urlpatterns = [
     path('api/login/', views.LoginView.as_view(), name='login'),
 
     path('api/seller/profile/', views.SellerProfileView.as_view(), name='seller-profile'),
+
+    path('api/customer/profile/', views.CustomerProfileView.as_view(), name='customer-profile'),
+
+    path('api/products/list/', views.ProductListView.as_view(), name='product-list'),
+    path('api/seller/product/', views.ProductUploadView.as_view(), name='seller-product'),
+    path('api/products/<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Accounts, Seller
+from .models import Accounts, Seller, Customer, Product
 from django.contrib.auth import authenticate
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -40,4 +40,23 @@ class SellerSerializer(serializers.ModelSerializer):
             'username', 'company_name', 'company_address', 'phone_number',
             'website', 'credit_score', 'total_products', 'fake_flags',
             'is_blacklisted', 'trust_rating'
+        ]
+
+class CustomerSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+
+    class Meta:
+        model = Customer
+        fields = [
+            'username', 'address1', 'address2', 'city', 'state',
+            'country', 'pincode', 'phone'
+        ]
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = [
+            'name', 'brand', 'description', 'price', 'category', 'id',
+            'image', 'created_at', 'is_fake', 'fake_flags', 'trust_score', 
+            'external_link', 'verified_source'
         ]

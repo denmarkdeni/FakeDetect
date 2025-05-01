@@ -2,12 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer
+from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer, CustomerSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import login
 from rest_framework.permissions import AllowAny
-from .models import Accounts, Seller
+from .models import Accounts, Seller, Customer, Product
 
 
 
@@ -19,7 +19,10 @@ class RegisterView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             token, _ = Token.objects.get_or_create(user=user)
-            Seller.objects.create(user=user)
+            if user.accounts.role == 'customer':
+                Customer.objects.create(user=user)
+            elif user.accounts.role == 'seller':
+                Seller.objects.create(user=user)
             return Response({"token": token.key}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -36,10 +39,70 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SellerProfileView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         seller = request.user.seller
         serializer = SellerSerializer(seller)
         print(serializer.data)
         return Response(serializer.data)
+    
+    def put(self, request):
+        seller = request.user.seller
+        serializer = SellerSerializer(seller, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+class ProductListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Fetch all products, or filter as needed
+        if request.user.accounts.role == 'customer':
+            products = Product.objects.all()
+        elif request.user.accounts.role == 'seller':
+            products = Product.objects.filter(seller=request.user.seller)  
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    
+class ProductUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(seller=request.user.seller)  
+            return Response({'message': 'Product uploaded successfully!'}, status=201)
+        
+        return Response(serializer.errors, status=400)
+    
+class CustomerProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        customer = request.user.customer
+        serializer = CustomerSerializer(customer)
+        print(serializer.data)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        customer = request.user.customer
+        serializer = CustomerSerializer(customer, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+class ProductDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            product = Product.objects.get(pk=pk)
+            serializer = ProductSerializer(product)
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=404)

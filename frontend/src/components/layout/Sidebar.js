@@ -1,12 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Styles.css';
 import 'animate.css';
 
 export default function Sidebar() {
+  const [animate, setAnimate] = useState(false);
   const role = localStorage.getItem('role');
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    alert("👋 Logged out!");
+    navigate('/login');
+  };
+
+  useEffect(() => {
+    // Check if the animation has already been applied for the current session
+    const hasAnimated = sessionStorage.getItem('sidebarAnimated');
+
+    if (!hasAnimated) {
+      // If not, apply the animation and set the session storage flag
+      setAnimate(true);
+      sessionStorage.setItem('sidebarAnimated', 'true');
+    }
+  }, []);
+
   return (
-    <div className="sidebar animate__animated animate__slideInLeft">
+    <div className={`sidebar ${animate ? 'animate__animated animate__slideInLeft' : ''}`}>
       <h2 className="sidebar-title">FakeDetect</h2>
       <ul>
         {role === 'customer' && (
@@ -17,13 +37,13 @@ export default function Sidebar() {
               </Link>
             </li>
             <li>
-              <Link to="/profile" className="sidebar-link">
+              <Link to="/customer-profile" className="sidebar-link">
                 <span className="icon">👤</span> Profile
               </Link>
             </li>
             <li>
-              <Link to="/check-product" className="sidebar-link">
-                <span className="icon">🕵️</span> Check Product
+              <Link to="/customer-products" className="sidebar-link">
+                <span className="icon">🕵️</span> Check Products
               </Link>
             </li>
             <li>
@@ -46,24 +66,24 @@ export default function Sidebar() {
               </Link>
             </li>
             <li>
-              <Link to="/upload-product" className="sidebar-link">
+              <Link to="/product-upload" className="sidebar-link">
                 <span className="icon">📦</span> Upload Product
               </Link>
             </li>
             <li>
-              <Link to="/my-products" className="sidebar-link">
+              <Link to="/product-list" className="sidebar-link">
                 <span className="icon">📊</span> My Products
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/product-feedbacks" className="sidebar-link">
                 <span className="icon">💢</span> Fake Flags
               </Link>
-            </li>
+            </li> */}
           </>
         )}
         <li>
-          <Link to="/logout" className="sidebar-link logout-link">
+          <Link onClick={handleLogout} to="/login" className="sidebar-link logout-link">
             <span className="icon">❌</span> Logout
           </Link>
         </li>

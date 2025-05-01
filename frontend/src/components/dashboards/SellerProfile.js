@@ -1,163 +1,170 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import DashboardLayout from '../layout/DashboardLayout';
-import 'animate.css';
+import '../../styles/tail.css';
 
-export default function SellerProfile() {
-  const [seller, setSeller] = useState(null);
+function SellerProfileForm() {
+  const [formData, setFormData] = useState({
+    company_name: '',
+    company_address: '',
+    phone_number: '',
+    website: '',
+  });
+
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
+  // ✨ On page load, fetch seller data
   useEffect(() => {
-    const fetchSellerProfile = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        console.log(token);
-        if (!token) {
-          throw new Error('No authentication token found. Please log in.');
-        }
-
-        const response = await fetch('http://127.0.0.1:8000/api/seller/profile/', {
-          headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
+    const token = localStorage.getItem('token');
+    console.log('Fetched token:', token);
+  
+    if (!token) {
+      throw new Error('No authentication token found. Please log in.');
+    }
+  
+    fetch('http://127.0.0.1:8000/api/seller/profile/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Token ${token}`, // Small correction: Capital "T" in Token
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
         if (!response.ok) {
-          if (response.status === 401) {
-            throw new Error('Unauthorized. Please log in again.');
-          }
-          throw new Error('Failed to fetch profile');
+          throw new Error('Failed to fetch seller profile');
         }
+        return response.json(); // <<< Convert response to JSON
+      })
+      .then(data => {
+        console.log('Fetched data:', data);
+        setFormData({
+          company_name: data.company_name || '',
+          company_address: data.company_address || '',
+          phone_number: data.phone_number || '',
+          website: data.website || '',
+        });
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching seller data:', err);
+        setLoading(false);
+      });
+  }, []);  
 
-        const data = await response.json();
-        setSeller(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-        if (err.message.includes('Unauthorized') || err.message.includes('token')) {
-          localStorage.clear();
-          navigate('/login');
-        }
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // ✨ Submit updated seller profile
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Submitting:', formData);
+  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No authentication token found. Please log in.');
+      setError('Authentication error. Please log in again.');
+      return;
+    }
+  
+    axios.put('http://127.0.0.1:8000/api/seller/profile/', formData, {
+      headers: {
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json',
       }
-    };
-    fetchSellerProfile();
-  }, [navigate]);
+    })
+      .then(response => {
+        console.log('Update successful:', response.data);
+        setSuccess(true);
+        setError('');
+      })
+      .catch(err => {
+        console.error('Update failed:', err);
+        setError('Failed to update profile. Please try again.');
+        setSuccess(false);
+      });
+  };  
 
   if (loading) {
-    return (
-      <DashboardLayout title="Seller Profile">
-        <div className="p-4 animate__animated animate__fadeIn">
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </DashboardLayout>
-    );
+    return <div className="text-center mt-10">Loading seller profile...</div>;
   }
-
-  if (error) {
-    return (
-      <DashboardLayout title="Seller Profile">
-        <div className="p-4 animate__animated animate__fadeIn">
-          <p className="text-red-600">Error: {error}</p>
-        </div>
-      </DashboardLayout>
-    );
-  }
-
-  const trustRating = seller.trust_rating || 0;
-  const isVerified = !seller.is_blacklisted && trustRating >= 80;
 
   return (
-    <DashboardLayout title="Seller Profile">
-      <div className="p-4 space-y-4 animate__animated animate__fadeIn">
-        {/* Profile Card */}
-        <div className="bg-white p-4 rounded-lg shadow-sm animate__animated animate__slideInUp">
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="relative w-8 h-8">
-              <svg className="w-full h-full" viewBox="0 0 100 100">
-                <circle
-                  className="text-gray-200"
-                  strokeWidth="4"
-                  stroke="currentColor"
-                  fill="transparent"
-                  r="45"
-                  cx="50"
-                  cy="50"
-                />
-                <circle
-                  className="text-blue-500 transition-all duration-1000 ease-in-out"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  stroke="currentColor"
-                  fill="transparent"
-                  r="45"
-                  cx="50"
-                  cy="50"
-                  strokeDasharray={`${trustRating * 2.83} 283`}
-                  transform="rotate(-90 50 50)"
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-800 z-10">
-                {trustRating}
-              </div>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold">{seller.company_name}</h2>
-              <p className="text-sm text-gray-500">@{seller.username}</p>
-            </div>
+    <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md margin-lt">
+        <h2 className="text-2xl font-bold mb-6 text-center">Edit Seller Profile</h2>
+        
+        {success && <p className="text-green-600 mb-4 text-center">Profile updated successfully!</p>}
+        {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Company Name */}
+          <div>
+            <label className="block text-gray-700">Company Name</label>
+            <input
+              type="text"
+              name="company_name"
+              value={formData.company_name}
+              onChange={handleChange}
+              required
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
 
-          {/* Verification Status */}
-          <div className="mb-4">
-            <p className={`text-sm font-semibold ${isVerified ? 'text-green-600' : 'text-red-600'}`}>
-              {isVerified ? '✅ Verified Seller' : '⚠️ Verification Pending'}
-            </p>
-            <p className="text-xs text-gray-500">
-              {isVerified
-                ? 'Your high trust rating and clean record verify your reliability!'
-                : 'Improve your trust rating or resolve blacklisting to get verified.'}
-            </p>
+          {/* Company Address */}
+          <div>
+            <label className="block text-gray-700">Company Address</label>
+            <textarea
+              name="company_address"
+              value={formData.company_address}
+              onChange={handleChange}
+              required
+              rows="3"
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
 
-          {/* Seller Details */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm font-medium text-gray-700">Company Address</p>
-              <p className="text-sm text-gray-500">{seller.company_address}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-700">Phone Number</p>
-              <p className="text-sm text-gray-500">{seller.phone_number}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-700">Website</p>
-              <a
-                href={seller.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-blue-500 hover:underline"
-              >
-                {seller.website || 'N/A'}
-              </a>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-700">Total Products</p>
-              <p className="text-sm text-gray-500">{seller.total_products}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-700">Fake Flags</p>
-              <p className="text-sm text-gray-500">{seller.fake_flags}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-700">Blacklisted</p>
-              <p className="text-sm text-gray-500">{seller.is_blacklisted ? 'Yes' : 'No'}</p>
-            </div>
+          {/* Phone Number */}
+          <div>
+            <label className="block text-gray-700">Phone Number</label>
+            <input
+              type="text"
+              name="phone_number"
+              value={formData.phone_number}
+              onChange={handleChange}
+              required
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
-        </div>
+
+          {/* Website */}
+          <div>
+            <label className="block text-gray-700">Website (optional)</label>
+            <input
+              type="url"
+              name="website"
+              value={formData.website}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div><br />
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
+          >
+            Save Profile
+          </button>
+        </form>
       </div>
     </DashboardLayout>
   );
 }
+
+export default SellerProfileForm;
