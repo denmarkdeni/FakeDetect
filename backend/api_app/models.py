@@ -20,6 +20,7 @@ class Customer(models.Model):
     pincode = models.CharField(max_length=20)
     country = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
+    points = models.IntegerField(default=0)  
 
     def __str__(self):
         return f"Customer - {self.user.username}"
@@ -59,6 +60,8 @@ class Product(models.Model):
     is_fake = models.BooleanField(default=False)
     fake_flags = models.IntegerField(default=0)
     trust_score = models.IntegerField(default=100)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
     
     # 🔗 External Metadata 
     external_link = models.URLField(blank=True, null=True)

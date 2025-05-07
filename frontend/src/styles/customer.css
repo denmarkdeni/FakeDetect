@@ -256,10 +256,25 @@ body {
 }
 
 .btn-flag {
-  background-color: #f5450f;
+  background-color: #f1ce83;
   color: white;
 }
 
 .btn-flag:hover {
-  background-color: #80360c;
+  background-color: #e08e5e;
+}
+
+.cart-icon img {
+  border: red 2px solid;
+  padding: 10px;
+  border-radius: 30%;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  position: absolute;
+  right: 10%;
+}
+
+.cart-icon img:hover {
+  transform: scale(1.1);
 }

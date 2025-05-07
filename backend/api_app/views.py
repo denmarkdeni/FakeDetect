@@ -7,8 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import login
 from rest_framework.permissions import AllowAny
-from .models import Accounts, Seller, Customer, Product
-
+from .models import Accounts, Seller, Customer, Product, Cart, Order
 
 
 class RegisterView(APIView):
@@ -98,11 +97,26 @@ class CustomerProfileView(APIView):
     
 class ProductDetailView(APIView):
     permission_classes = [IsAuthenticated]
-
+    
     def get(self, request, pk):
+        print(request.user.username)
         try:
             product = Product.objects.get(pk=pk)
             serializer = ProductSerializer(product)
             return Response(serializer.data)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=404)
+
+class AddToCartView(APIView):
+    permission_classes =[IsAuthenticated]
+    
+    def post(self, request, pk):
+        try:
+            product = Product.objects.get(pk=pk)
+            cart_item, created = Cart.objects.get_or_create(customer = request.user.customer,product=product)
+            if created:
+                return Response({'message': 'product added to cart'},status=201)
+            else:
+                return Response({'message': 'product already in cart'},status=200)
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)

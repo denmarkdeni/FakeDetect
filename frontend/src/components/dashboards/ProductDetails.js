@@ -31,8 +31,24 @@ export default function ProductDetails() {
   }, [id]);
 
   const handleAddToCart = () => {
-    // You can expand this later for cart logic
-    alert("Product added to cart!");
+    const token = localStorage.getItem("token");
+    if(!token){
+      setError("No token found. Please login.");
+      return;
+    }
+
+    axios.post(`http://127.0.0.1:8000/api/add_to_cart/${id}/`,{},{
+      headers: {
+        Authorization: `Token ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      alert(response.data.message);
+    })
+    .catch((err) => {
+      setError(`error : ${err};`);
+    });
   };
 
   const handleBuyNow = () => {
@@ -59,6 +75,9 @@ export default function ProductDetails() {
   return (
     <DashboardLayout>
       <div className="product-details-container">
+        <div className="cart-icon">
+          <img src="https://cdn-icons-png.freepik.com/512/891/891468.png?ga=GA1.1.2114069533.1739445730"></img>
+        </div>
         <div className="product-img">
           <img
             src={`http://127.0.0.1:8000${product.image}`}
@@ -90,7 +109,7 @@ export default function ProductDetails() {
               Buy Now
             </button>
             <button className="btn-flag" onClick={handleFlag}>
-              Mark Fake 
+              <abbr title="Flag as Fake">🚩</abbr>
             </button>
           </div>
         </div>

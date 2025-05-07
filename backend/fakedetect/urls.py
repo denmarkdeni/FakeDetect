@@ -34,6 +34,7 @@ urlpatterns = [
     path('api/seller/product/', views.ProductUploadView.as_view(), name='seller-product'),
     path('api/products/<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
 
+    path('api/add_to_cart/<int:pk>/', views.AddToCartView.as_view(), name='add_to_cart'),
 ]
 
 if settings.DEBUG:
