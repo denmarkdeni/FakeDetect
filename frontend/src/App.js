@@ -11,6 +11,8 @@ import ProductList from "./components/dashboards/SellerProducts";
 import CustomerProfile from "./components/dashboards/CustomerProfile";
 import CustomerProducts from "./components/dashboards/CustomerProducts";
 import ProductDetails from "./components/dashboards/ProductDetails";
+import CartPage from "./components/dashboards/CartList";
+import PaymentPage from "./components/dashboards/PaymentPage";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/customer-profile" element={<CustomerProfile />} />
         <Route path="/customer-products" element={<CustomerProducts />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/payment-page/:id" element={<PaymentPage />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Accounts, Seller, Customer, Product
+from .models import Accounts, Seller, Customer, Product, Cart  
 from django.contrib.auth import authenticate
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -60,3 +60,10 @@ class ProductSerializer(serializers.ModelSerializer):
             'image', 'created_at', 'is_fake', 'fake_flags', 'trust_score', 
             'external_link', 'verified_source'
         ]
+
+class CartSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()  # nested product details
+
+    class Meta:
+        model = Cart
+        fields = ['id', 'product', 'quantity']

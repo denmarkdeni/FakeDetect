@@ -27,7 +27,6 @@ urlpatterns = [
     path('api/login/', views.LoginView.as_view(), name='login'),
 
     path('api/seller/profile/', views.SellerProfileView.as_view(), name='seller-profile'),
-
     path('api/customer/profile/', views.CustomerProfileView.as_view(), name='customer-profile'),
 
     path('api/products/list/', views.ProductListView.as_view(), name='product-list'),
@@ -35,6 +34,9 @@ urlpatterns = [
     path('api/products/<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
 
     path('api/add_to_cart/<int:pk>/', views.AddToCartView.as_view(), name='add_to_cart'),
+    path('api/cart/', views.CartListView.as_view(), name='cart_list'),
+    path('api/remove_cart/<int:pk>/', views.RemoveCartView.as_view(), name='remove_cart'),
+    path('api/flag_product/<int:pk>/', views.FlagProductView.as_view(), name='flag_product'),
 ]
 
 if settings.DEBUG:

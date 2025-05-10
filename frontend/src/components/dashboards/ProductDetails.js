@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../styles/customer.css";
 import DashboardLayout from "../layout/DashboardLayout";
@@ -8,6 +8,7 @@ export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -52,11 +53,34 @@ export default function ProductDetails() {
   };
 
   const handleBuyNow = () => {
-    alert("Redirecting to checkout...");
+    alert("Redirecting to Payment Page...");
+    navigate(`/payment-page/${id}`);
   };
 
   const handleFlag = () => {
-    alert("Product Flagged...");
+    const token = localStorage.getItem("token");
+    if(!token){
+      setError("No token found. Please login.");
+      return;
+    }
+    const reason = prompt("Please enter the reason for flagging this product:");
+    if (!reason) {
+      alert("Flagging cancelled.");
+      return;
+    }
+
+    axios.post(`http://127.0.0.1:8000/api/flag_product/${id}/`,{'reason':reason},{
+      headers: {
+        Authorization: `Token ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      alert(response.data.message);
+    })
+    .catch((err) => {
+      setError(`error : ${err};`);
+    });
   };
 
   if (error)
@@ -75,8 +99,10 @@ export default function ProductDetails() {
   return (
     <DashboardLayout>
       <div className="product-details-container">
-        <div className="cart-icon">
+        <div className="cart-icon" title="Cart List">
+        <Link to={"/cart"}>
           <img src="https://cdn-icons-png.freepik.com/512/891/891468.png?ga=GA1.1.2114069533.1739445730"></img>
+        </Link>
         </div>
         <div className="product-img">
           <img

@@ -1,0 +1,50 @@
+.payment-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  
+  .payment-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    color: #2c3e50;
+  }
+  
+  .payment-options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .payment-options label {
+    font-size: 1.1rem;
+    color: #34495e;
+  }
+  
+  .pay-btn {
+    background-color: #2980b9;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .pay-btn:hover {
+    background-color: #1c5980;
+  }
+  
+  .success-msg {
+    margin-top: 30px;
+    color: green;
+    font-size: 1.2rem;
+  }
+  

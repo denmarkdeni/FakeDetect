@@ -2,12 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer, CustomerSerializer
+from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer, CustomerSerializer, CartSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import login
 from rest_framework.permissions import AllowAny
-from .models import Accounts, Seller, Customer, Product, Cart, Order
+from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists
 
 
 class RegisterView(APIView):
@@ -120,3 +120,45 @@ class AddToCartView(APIView):
                 return Response({'message': 'product already in cart'},status=200)
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)
+
+class FlagProductView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            product = Product.objects.get(pk=pk)
+            if FlagLists.objects.filter(customer=request.user.customer, product=product).exists():
+                return Response({'message': 'Product already flagged'}, status=200)
+            reason = request.data.get('reason')
+            if not reason:
+                return Response({'error': 'Reason for flagging is required'}, status=200)
+            FlagLists.objects.create(customer=request.user.customer, product=product,reason=reason)
+            product.fake_flags += 1
+            product.save()
+        
+            return Response({'message': 'Product flagged successfully!'}, status=200)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=404)
+        
+class CartListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            cart_items = Cart.objects.filter(customer=request.user.customer)
+            serializer = CartSerializer(cart_items, many=True)
+            print(serializer.data)
+            return Response(serializer.data, status=200)
+        except:
+            return Response({'error': 'No cart found for user'}, status=404)
+        
+class RemoveCartView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            cart_item = Cart.objects.get(pk=pk, customer=request.user.customer)
+            cart_item.delete()
+            return Response({'message': 'Item removed from cart'})
+        except Cart.DoesNotExist:
+            return Response({'error': 'Item not found'}, status=404)
