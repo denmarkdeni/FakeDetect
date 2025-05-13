@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import login
 from rest_framework.permissions import AllowAny
-from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists
+from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists, Payment
 
 
 class RegisterView(APIView):
@@ -162,3 +162,29 @@ class RemoveCartView(APIView):
             return Response({'message': 'Item removed from cart'})
         except Cart.DoesNotExist:
             return Response({'error': 'Item not found'}, status=404)
+
+class PaymentView(APIView):
+    permission_classes=[IsAuthenticated]
+
+    def post(self,request,pk):
+        try:
+            product = Product.objects.get(pk=pk)
+            order = Order.objects.create(
+                customer=request.user.customer,
+                seller=product.seller,
+                product=product,
+                total_amount=product.price,
+                status='pending'
+            )
+            payment = Payment.objects.create(
+                order=order,
+                # amount=product.price,
+                payment_method=request.data.get('payment_method'),
+                payment_status='success'
+            )
+            return Response({'message': 'Payment successful!'}, status=200)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=404)
+        except Exception as e:
+            print(e)
+            return Response({'error': 'Payment failed in Back End---->{e}'}, status=200)

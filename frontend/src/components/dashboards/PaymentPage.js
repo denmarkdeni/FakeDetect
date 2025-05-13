@@ -2,19 +2,31 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../../styles/PaymentPage.css';
 import DashboardLayout from '../layout/DashboardLayout';
+import API from '../../api/api';
 
 const PaymentPage = () => {
   const { id } = useParams();
   const [paymentMethod, setPaymentMethod] = useState('');
   const [success, setSuccess] = useState(false);
+  const token = localStorage.getItem('token');
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!paymentMethod) {
       alert("Please select a payment method!");
       return;
     }
 
-    // You can simulate saving order/payment here
+    if (!token) {
+      alert("Please log in to proceed with the payment.");
+      return;
+    }
+    const response = await API.post(`payment/${id}/`,{'payment_method':paymentMethod});
+    if (response.status !== 200) {
+      alert("Payment failed. Please try again.");
+      return;
+    }
+    alert(response.data.message);
+
     setSuccess(true);
   };
 

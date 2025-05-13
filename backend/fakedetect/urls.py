@@ -37,6 +37,8 @@ urlpatterns = [
     path('api/cart/', views.CartListView.as_view(), name='cart_list'),
     path('api/remove_cart/<int:pk>/', views.RemoveCartView.as_view(), name='remove_cart'),
     path('api/flag_product/<int:pk>/', views.FlagProductView.as_view(), name='flag_product'),
+
+    path('api/payment/<int:pk>/', views.PaymentView.as_view(), name='payment'),
 ]
 
 if settings.DEBUG:
