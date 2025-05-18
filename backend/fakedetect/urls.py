@@ -26,6 +26,8 @@ urlpatterns = [
     path('api/register/', views.RegisterView.as_view(), name='register'),
     path('api/login/', views.LoginView.as_view(), name='login'),
 
+    path('api/home/products/', views.HomePageView.as_view(), name='home-products'),
+
     path('api/seller/profile/', views.SellerProfileView.as_view(), name='seller-profile'),
     path('api/customer/profile/', views.CustomerProfileView.as_view(), name='customer-profile'),
 

@@ -188,3 +188,12 @@ class PaymentView(APIView):
         except Exception as e:
             print(e)
             return Response({'error': 'Payment failed in Back End---->{e}'}, status=200)
+        
+class HomePageView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        print(serializer.data)
+        return Response(serializer.data, status=200)    
