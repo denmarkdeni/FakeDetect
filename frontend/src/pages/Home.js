@@ -164,7 +164,7 @@ export default function Home() {
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="/contact">
+                      <a className="nav-link" href="#contact-info">
                         Contact us
                       </a>
                     </li>
@@ -236,19 +236,20 @@ export default function Home() {
           <div className="feature_container">
             <div className="box">
               <div className="img-box">
-                <svg
+                {/* <svg
                   version="1.1"
                   id="Capa_1"
                   xmlns="http://www.w3.org/2000/svg"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  x="0px"
-                  y="0px"
+                  x="60px"
+                  y="60px"
                   viewBox="0 0 422.518 422.518"
                   xmlSpace="preserve"
                 >
-                  <path d="M422.512,215.424c0-0.079-0.004-0.158-0.005-0.237... (TRUNCATED for clarity) ..." />
-                </svg>
-              </div>
+                   <path d="M8 0a8 8 0 1 0 8 8A8.01 8.01 0 0 0 8 0Zm1 12H7v-2h2Zm0-3H7V4h2Z" />
+                </svg> */}
+                <img width="64" height="64" src="https://img.icons8.com/external-tulpahn-outline-color-tulpahn/64/external-fast-delivery-online-shopping-tulpahn-outline-color-tulpahn.png" alt="external-fast-delivery-online-shopping-tulpahn-outline-color-tulpahn"/>
+              </div> 
               <div className="detail-box">
                 <h5>FAST DELIVERY</h5>
                 <p>
@@ -261,7 +262,7 @@ export default function Home() {
 
             <div className="box">
               <div className="img-box">
-                <svg
+                {/* <svg
                   id="Capa_1"
                   height="512"
                   viewBox="0 0 512 512"
@@ -269,7 +270,8 @@ export default function Home() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path d="M159.66 360.3c-7.549-5.03-17.605 2.261-15.18 10.977... (shortened) ..." />
-                </svg>
+                </svg> */}
+                <img width="64" height="64" src="https://img.icons8.com/dusk/64/popular-topic.png" alt="popular-topic"/>
               </div>
               <div className="detail-box">
                 <h5>HOW REVIEW HELPS?</h5>
@@ -279,7 +281,7 @@ export default function Home() {
 
             <div className="box">
               <div className="img-box">
-                <svg
+                {/* <svg
                   version="1.1"
                   id="Capa_1"
                   xmlns="http://www.w3.org/2000/svg"
@@ -290,7 +292,8 @@ export default function Home() {
                   xmlSpace="preserve"
                 >
                   <path d="M471.728 84.718H40.272C18.066 84.718 0 102.784 0 125.99v262.023... (TRUNCATED)" />
-                </svg>
+                </svg> */}
+                <img width="94" height="94" src="https://img.icons8.com/3d-fluency/94/security-checked.png" alt="security-checked"/>
               </div>
               <div className="detail-box">
                 <h5>SECURE PLATFORM</h5>
@@ -321,7 +324,7 @@ export default function Home() {
             </div>
             <div className="col-lg-7 col-md-5">
               <div className="img-box">
-                <img src="images/medicines.jpg" alt="Medicines" />
+                <img width="94" height="94" src="/assets/images/v2.png" alt="discount"/>
               </div>
             </div>
           </div>
@@ -332,44 +335,43 @@ export default function Home() {
       <section className="health_section layout_padding">
         <div className="health_carousel-container">
           <h2 className="text-uppercase">TOP PICKS</h2>
-          <div className="carousel-wrap layout_padding2">
-            <div className="owl-carousel owl-loaded owl-drag">
-              <div className="owl-stage-outer">
-                {products.map((product, index) => (
-                  <div className="item" key={index}>
-                    <div className="box">
-                      <div className="btn_container">
-                        <a href="#">Buy Now</a>
-                      </div>
-                      <div className="img-box">
-                        <img
-                          src={`http://127.0.0.1:8000${product.image}`}
-                          alt={product.name}
-                        />
-                      </div>
-                      <div className="detail-box">
-                        <div className="star_container">
-                          {[...Array(4)].map((_, index) => (
-                            <i className="fa fa-star" key={index}></i>
-                          ))}
-                          <i className="fa fa-star-o"></i>
-                        </div>
-                        <div className="text">
-                          <h6>{product.name}</h6>
-                          <h6 className="price">
-                            <span>$</span>
-                            {product.price}
-                          </h6>
-                        </div>
-                      </div>
+          <div className="product-grid">
+            {products.map((product, index) => (
+              <div className="item" key={index}>
+                <div className="box">
+                  <div className="btn_container">
+                    <a href="#">Buy Now</a>
+                  </div>
+                  <div className="img-box">
+                    <img
+                      src={`http://127.0.0.1:8000${product.image}`}
+                      alt={product.name}
+                    />
+                  </div>
+                  <div className="detail-box">
+                    <div className="star_container">
+                      {[...Array(4)].map((_, index) => (
+                        <i className="fa fa-star" key={index}></i>
+                      ))}
+                      <i className="fa fa-star-o"></i>
+                    </div>
+                    <div className="text">
+                      <h6>{product.name}</h6>
+                      <h6 className="price">
+                        <span>₹</span>
+                        {product.price}
+                      </h6>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
+      </section>
 
+      {/* Reviews Section */}
+      <section className="health_section layout_padding">
         <div className="health_carousel-container">
           <h2 className="text-uppercase">REVIEWS & FEEDBACKS</h2>
           <div className="carousel-wrap layout_padding2">
@@ -580,7 +582,7 @@ export default function Home() {
       </section>
 
       {/* Info Section */}
-      <section className="info_section layout_padding2">
+      <section className="info_section layout_padding2" id="contact-info">
         <div className="container">
           <div className="row">
             <div className="col-md-3">
