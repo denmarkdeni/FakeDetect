@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import "../styles/homePage/style.css";
 import "../styles/homePage/bootstrap.css";
@@ -103,13 +103,13 @@ export default function Home() {
                     className="s-2"
                   />
                 </a>
-                <a href="#">
+                <Link to="#">
                   <img
                     src="/assets/images/instagram.png"
                     alt=""
                     className="s-3"
                   />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -144,22 +144,22 @@ export default function Home() {
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="/about">
+                      <a className="nav-link" href="/">
                         About
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="/review">
+                      <a className="nav-link" href="#review-id">
                         Review
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="/credit">
+                      <a className="nav-link" href="/">
                         Credits
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="/redeem">
+                      <a className="nav-link" href="/">
                         Redeem
                       </a>
                     </li>
@@ -178,14 +178,11 @@ export default function Home() {
                     ></button>
                   </form>
 
-                  <div
-                    className="login_btn-contanier ml-0 ml-lg-5"
-                    onClick={() => navigate("/login")}
-                  >
-                    <a href="#">
+                  <div className="login_btn-contanier ml-0 ml-lg-5">
+                    <Link to="/auth">
                       <img src="/assets/images/user.png" alt="" />
                       <span>Login</span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -375,7 +372,7 @@ export default function Home() {
         <div className="health_carousel-container">
           <h2 className="text-uppercase">REVIEWS & FEEDBACKS</h2>
           <div className="carousel-wrap layout_padding2">
-            <div className="owl-carousel owl-2">
+            {/* <div className="owl-carousel owl-2"> */}
               <div className="item">
                 <div className="box">
                   <div className="btn_container">
@@ -388,7 +385,7 @@ export default function Home() {
                 </div>
               </div>
               {/* Add more review items as needed */}
-            </div>
+            {/* </div> */}
           </div>
         </div>
       </section>
@@ -400,7 +397,7 @@ export default function Home() {
             <h2>Let's Scan Together</h2>
           </div>
           <div className="img-box">
-            <img src="/assets/images/about-medicine.png" alt="" />
+            <img src="/assets/images/b1.png" alt="" />
           </div>
           <div className="detail-box">
             <p align="justify">
@@ -503,7 +500,7 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section className="contact_section">
+      <section className="contact_section" id="review-id">
         <div className="container">
           <div className="row">
             <div className="custom_heading-container">
@@ -557,18 +554,16 @@ export default function Home() {
               </div>
             </div>
             <div className="col-md-7">
-              <div className="detail-box">
-                <h4>How our star rating system works</h4>
+              <div className="detail-box" style={{ color: "black" }}>
+                <h4 style={{marginTop:"1opx"}}>How our star rating system works</h4>
                 <p>
                   <span style={{ color: "red" }}>★★</span>
                   <br />
                   <strong>Likely fake</strong>
                   <br />
-                  <br />
                   <span style={{ color: "green" }}>★★★</span>
                   <br />
                   <strong>Mixed feedback</strong>
-                  <br />
                   <br />
                   <span style={{ color: "gold" }}>★★★★★</span>
                   <br />
@@ -615,17 +610,17 @@ export default function Home() {
                 <h4>Menu</h4>
                 <ul className="navbar-nav">
                   <li className="nav-item active">
-                    <a className="nav-link" href="index.html">
+                    <a className="nav-link" href="/">
                       Home
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="about.html">
+                    <a className="nav-link" href="/">
                       About
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="review.html">
+                    <a className="nav-link" href="/">
                       Review
                     </a>
                   </li>

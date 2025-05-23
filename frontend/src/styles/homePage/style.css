@@ -634,7 +634,8 @@ a:focus {
 }
 
 .about_section .container .img-box img {
-  width: 100%;
+  width: 50%;
+  border-radius: 10px;
 }
 
 .about_section .container .detail-box a {
@@ -779,7 +780,11 @@ a:focus {
 }
 
 .contact_section .detail-box {
-  background-image: url(./images/contact-bg.jpg);
+  background-image: url("https://img.freepik.com/free-photo/customer-feedback-review_23-2151952995.jpg");
+  /* background-size: cover; */
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10px;
   color: #ffffff;
   padding: 140px 15%;
   text-align: center;
