@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Accounts, Seller, Customer, Product, Cart  
+from .models import Accounts, Seller, Customer, Product, Cart, Review, FlagLists
 from django.contrib.auth import authenticate
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -52,13 +52,26 @@ class CustomerSerializer(serializers.ModelSerializer):
             'country', 'pincode', 'phone'
         ]
 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'customer', 'rating', 'comment', 'created_at']
+
+class FlagListSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='customer.user.username', read_only=True)
+    class Meta:
+        model = FlagLists
+        fields = ['id', 'customer', 'username', 'reason', 'created_at']
+
 class ProductSerializer(serializers.ModelSerializer):
+    reviews = ReviewSerializer(many=True, read_only=True, source='review_set')
+    flag_comments = FlagListSerializer(many=True, read_only=True, source='flaglists_set')
     class Meta:
         model = Product
         fields = [
             'name', 'brand', 'description', 'price', 'category', 'id',
             'image', 'created_at', 'is_fake', 'fake_flags', 'trust_score', 
-            'external_link', 'verified_source'
+            'external_link', 'verified_source', 'reviews','flag_comments'
         ]
 
 class CartSerializer(serializers.ModelSerializer):
@@ -67,3 +80,4 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ['id', 'product', 'quantity']
+

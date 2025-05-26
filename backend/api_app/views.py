@@ -34,7 +34,12 @@ class LoginView(APIView):
             user = serializer.validated_data
             login(request, user)
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key,"role":user.accounts.role,"username":user.username}, status=status.HTTP_200_OK)
+
+            if request.user.is_superuser:
+                role = 'admin'
+            else:
+                role = user.accounts.role
+            return Response({"token": token.key,"role":role,"username":user.username}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SellerProfileView(APIView):
@@ -43,7 +48,7 @@ class SellerProfileView(APIView):
     def get(self, request):
         seller = request.user.seller
         serializer = SellerSerializer(seller)
-        print(serializer.data)
+        # print(serializer.data)
         return Response(serializer.data)
     
     def put(self, request):
@@ -103,6 +108,7 @@ class ProductDetailView(APIView):
         try:
             product = Product.objects.get(pk=pk)
             serializer = ProductSerializer(product)
+            print(serializer.data)
             return Response(serializer.data)
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)

@@ -230,7 +230,7 @@ body {
 .btn-add,
 .btn-buy,
 .btn-flag {
-  padding: 10px 20px;
+  /* padding: 10px 20px; */
   border: none;
   cursor: pointer;
   font-weight: bold;
@@ -265,11 +265,11 @@ body {
 }
 
 .cart-icon img {
-  border: red 2px solid;
-  padding: 10px;
+  border: rgb(60, 255, 0) 2px solid;
+  padding: 5px;
   border-radius: 30%;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   margin-right: 5px;
   position: absolute;
   right: 10%;

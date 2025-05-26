@@ -22,7 +22,7 @@ body{
   justify-content: center;
   align-items: center;
   font-family: 'Nunito', sans-serif;
-  border-radius: 50%;
+  background: linear-gradient(183deg, azure, #c9def0);
   }
 
 

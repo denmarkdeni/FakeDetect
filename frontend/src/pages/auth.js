@@ -42,6 +42,8 @@ const AuthForm = () => {
         navigate("/customer-dashboard");
       } else if (res.data.role === "seller") {
         navigate("/seller-dashboard");
+      } else if (res.data.role === "admin") {
+        navigate("/admin-dashboard");
       } else {
         alert("❌ Invalid role. Please contact support.");
       }
@@ -58,7 +60,13 @@ const AuthForm = () => {
       const res = await API.post("register/", registerData);
       localStorage.setItem("token", res.data.token);
       alert("✅ Registered successfully!");
-      setIsSignup(true); // Switch to login view
+      setRegisterData({
+        username: "",
+        email: "",
+        password: "",
+        role: "customer",
+      })
+      setIsSignup(false); // Switch to login view
     } catch (err) {
       console.error(err);
       alert("❌ Registration failed. Try again.");

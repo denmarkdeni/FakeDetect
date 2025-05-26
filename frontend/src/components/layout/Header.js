@@ -9,7 +9,7 @@ export default function Header({ title }) {
   const handleLogout = () => {
     localStorage.clear();
     alert("👋 Logged out!");
-    navigate('/login');
+    navigate('/auth');
   };
 
   return (

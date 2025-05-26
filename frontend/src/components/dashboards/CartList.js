@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DashboardLayout from '../layout/DashboardLayout';
 import '../../styles/CartList.css';
+import { useNavigate } from 'react-router-dom';
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [error, setError] = useState('');
-
+  const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -32,7 +33,8 @@ function CartPage() {
 
   return (
     <DashboardLayout className="cart-container">
-      <h2>Your Cart</h2>
+      <br /><h2>Your Cart List</h2>
+      <button className="back-button" onClick={() => navigate(-1)}>Back</button><br />
       {cartItems.length === 0 ? <p>No items in cart.</p> : (
         <div className="cart-grid">
           {cartItems.map(item => (

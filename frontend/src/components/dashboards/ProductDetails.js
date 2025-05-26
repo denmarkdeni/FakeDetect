@@ -54,7 +54,7 @@ export default function ProductDetails() {
 
   const handleBuyNow = () => {
     alert("Redirecting to Payment Page...");
-    navigate(`/payment-page/${id}`);
+    navigate(`/payment-page/${id}`, { state: { product } });
   };
 
   const handleFlag = () => {
@@ -101,7 +101,7 @@ export default function ProductDetails() {
       <div className="product-details-container">
         <div className="cart-icon" title="Cart List">
         <Link to={"/cart"}>
-          <img src="https://cdn-icons-png.freepik.com/512/891/891468.png?ga=GA1.1.2114069533.1739445730"></img>
+          <img src="https://cdn-icons-png.freepik.com/512/891/891468.png?ga=GA1.1.2114069533.1739445730" ></img>
         </Link>
         </div>
         <div className="product-img">
@@ -139,6 +139,41 @@ export default function ProductDetails() {
             </button>
           </div>
         </div>
+      </div>
+      <div className="product-details-container">
+        <h3>Reviews</h3>
+        {product.reviews && product.reviews.length > 0 ? (
+          <ul className="reviews-list">
+            {product.reviews.map((review) => (
+              <li key={review.id}>
+                <p>
+                  <strong>{review.user.username}:</strong> {review.content}
+                </p>
+                <p>
+                  <strong>Rating:</strong> {review.rating}/5
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No reviews yet.</p>
+        )}
+      </div>
+      <div className="product-details-container">
+        <h3>Flag Comments</h3>
+        {product.flag_comments && product.flag_comments.length > 0 ? (
+          <ul className="flag-comments-list">
+            {product.flag_comments.map((comment) => (
+              <li key={comment.id}>
+                <p>
+                  <strong>{comment.username}:</strong> {comment.reason}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No flag comments yet.</p>
+        )}
       </div>
     </DashboardLayout>
   );
