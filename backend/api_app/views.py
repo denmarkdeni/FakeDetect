@@ -2,13 +2,13 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer, CustomerSerializer, CartSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import login
 from rest_framework.permissions import AllowAny
 from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists, Payment
-
+from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer
+from .serializers import CustomerSerializer, CartSerializer, OrderSerializer, FlagListSerializer
 
 class RegisterView(APIView):
     permission_classes = [IsAuthenticated | AllowAny]
@@ -203,3 +203,16 @@ class HomePageView(APIView):
         serializer = ProductSerializer(products, many=True)
         print(serializer.data)
         return Response(serializer.data, status=200)    
+    
+class MyOrdersView(APIView):
+    permission_classes = [IsAuthenticated | AllowAny]
+
+    def get(self, request):
+        try:
+            orders = Order.objects.filter(customer = request.user.customer)
+            serializer = OrderSerializer(orders, many = True)
+            print(serializer.data)
+            return Response(serializer.data)
+        except Order.DoesNotExist:
+            return Response({'error' : 'No orders found for user'},status=200)
+        

@@ -41,6 +41,8 @@ urlpatterns = [
     path('api/flag_product/<int:pk>/', views.FlagProductView.as_view(), name='flag_product'),
 
     path('api/payment/<int:pk>/', views.PaymentView.as_view(), name='payment'),
+
+    path('api/my-orders/', views.MyOrdersView.as_view(), name='my_orders'),
 ]
 
 if settings.DEBUG:

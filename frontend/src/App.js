@@ -13,6 +13,7 @@ import ProductDetails from "./components/dashboards/ProductDetails";
 import CartPage from "./components/dashboards/CartList";
 import PaymentPage from "./components/dashboards/PaymentPage";
 import AuthForm from "./pages/auth";
+import MyOrders from "./components/customer/MyOrders";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/payment-page/:id" element={<PaymentPage />} />
+        <Route path="/my-orders" element={<MyOrders />} />
       </Routes>
     </Router>
   );

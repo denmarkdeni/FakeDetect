@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Accounts, Seller, Customer, Product, Cart, Review, FlagLists
+from .models import Accounts, Seller, Customer, Product, Cart, Review, FlagLists, Order, Payment
 from django.contrib.auth import authenticate
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -81,3 +81,13 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = ['id', 'product', 'quantity']
 
+class OrderSerializer(serializers.ModelSerializer):
+    customer = CustomerSerializer(read_only=True)
+    product = ProductSerializer()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'customer', 'product', 'total_amount', 'status',
+            'created_at'
+        ]

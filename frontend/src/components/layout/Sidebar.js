@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Styles.css';
 import 'animate.css';
+import { FiHome, FiUser, FiShoppingBag, FiBox, FiLogOut, FiSearch } from 'react-icons/fi';
 
 export default function Sidebar() {
   const [animate, setAnimate] = useState(false);
@@ -15,11 +16,8 @@ export default function Sidebar() {
   };
 
   useEffect(() => {
-    // Check if the animation has already been applied for the current session
     const hasAnimated = sessionStorage.getItem('sidebarAnimated');
-
     if (!hasAnimated) {
-      // If not, apply the animation and set the session storage flag
       setAnimate(true);
       sessionStorage.setItem('sidebarAnimated', 'true');
     }
@@ -27,28 +25,30 @@ export default function Sidebar() {
 
   return (
     <div className={`sidebar ${animate ? 'animate__animated animate__slideInLeft' : ''}`}>
-      <h2 className="sidebar-title">FakeDetect</h2>
-      <ul>
+      <Link to="/" className="sidebar-title-link">
+        <h2 className="sidebar-title" >🛡️ CrediPlus</h2>
+      </Link>
+      <ul className="sidebar-list">
         {role === 'customer' && (
           <>
             <li>
               <Link to="/customer-dashboard" className="sidebar-link">
-                <span className="icon">🏠</span> Home
+                <FiHome className="sidebar-icon" /> Home
               </Link>
             </li>
             <li>
               <Link to="/customer-profile" className="sidebar-link">
-                <span className="icon">👤</span> Profile
+                <FiUser className="sidebar-icon" /> Profile
               </Link>
             </li>
             <li>
               <Link to="/customer-products" className="sidebar-link">
-                <span className="icon">🕵️</span> Check Products
+                <FiSearch className="sidebar-icon" /> Check Products
               </Link>
             </li>
             <li>
-              <Link to="/orders" className="sidebar-link">
-                <span className="icon">🛍️</span> My Orders
+              <Link to="/my-orders" className="sidebar-link">
+                <FiShoppingBag className="sidebar-icon" /> My Orders
               </Link>
             </li>
           </>
@@ -57,34 +57,29 @@ export default function Sidebar() {
           <>
             <li>
               <Link to="/seller-dashboard" className="sidebar-link">
-                <span className="icon">🏠</span> Home
+                <FiHome className="sidebar-icon" /> Home
               </Link>
             </li>
             <li>
               <Link to="/seller-profile" className="sidebar-link">
-                <span className="icon">👤</span> Profile
+                <FiUser className="sidebar-icon" /> Profile
               </Link>
             </li>
             <li>
               <Link to="/product-upload" className="sidebar-link">
-                <span className="icon">📦</span> Upload Product
+                <FiBox className="sidebar-icon" /> Upload Product
               </Link>
             </li>
             <li>
               <Link to="/product-list" className="sidebar-link">
-                <span className="icon">📊</span> My Products
+                <FiShoppingBag className="sidebar-icon" /> My Products
               </Link>
             </li>
-            {/* <li>
-              <Link to="/product-feedbacks" className="sidebar-link">
-                <span className="icon">💢</span> Fake Flags
-              </Link>
-            </li> */}
           </>
         )}
         <li>
           <Link onClick={handleLogout} to="/login" className="sidebar-link logout-link">
-            <span className="icon">❌</span> Logout
+            <FiLogOut className="sidebar-icon" /> Logout
           </Link>
         </li>
       </ul>
