@@ -48,7 +48,6 @@ class SellerProfileView(APIView):
     def get(self, request):
         seller = request.user.seller
         serializer = SellerSerializer(seller)
-        # print(serializer.data)
         return Response(serializer.data)
     
     def put(self, request):
@@ -180,7 +179,7 @@ class PaymentView(APIView):
                 seller=product.seller,
                 product=product,
                 total_amount=product.price,
-                status='pending'
+                status='paid'
             )
             payment = Payment.objects.create(
                 order=order,
@@ -211,7 +210,6 @@ class MyOrdersView(APIView):
         try:
             orders = Order.objects.filter(customer = request.user.customer)
             serializer = OrderSerializer(orders, many = True)
-            print(serializer.data)
             return Response(serializer.data)
         except Order.DoesNotExist:
             return Response({'error' : 'No orders found for user'},status=200)

@@ -2,6 +2,9 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Accounts, Seller, Customer, Product, Cart, Review, FlagLists, Order, Payment
 from django.contrib.auth import authenticate
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+from datetime import datetime, timedelta
 
 class RegisterSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(choices=[('customer', 'Customer'), ('seller', 'Seller')])
@@ -33,14 +36,43 @@ class LoginSerializer(serializers.Serializer):
 class SellerSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     trust_rating = serializers.FloatField()
+    monthly_sales = serializers.SerializerMethodField()
 
     class Meta:
         model = Seller
         fields = [
             'username', 'company_name', 'company_address', 'phone_number',
             'website', 'credit_score', 'total_products', 'fake_flags',
-            'is_blacklisted', 'trust_rating'
+            'is_blacklisted', 'trust_rating', 'monthly_sales'
         ]
+
+    def get_monthly_sales(self, obj):
+        # Get orders for the seller from the past 6 months
+        six_months_ago = datetime.now() - timedelta(days=180)
+        orders = Order.objects.filter(
+            seller=obj,
+            created_at__gte=six_months_ago,
+            status='paid'  # Only include paid orders
+        ).annotate(
+            month=TruncMonth('created_at')
+        ).values('month').annotate(
+            total=Sum('total_amount')
+        ).order_by('month')
+
+        # Format data for the frontend
+        labels = []
+        sales = []
+        for i in range(6):
+            month_date = (datetime.now() - timedelta(days=30 * i)).replace(day=1)
+            month_str = month_date.strftime('%b')
+            labels.insert(0, month_str)
+            total = next((o['total'] for o in orders if o['month'].month == month_date.month and o['month'].year == month_date.year), 0)
+            sales.insert(0, float(total))
+
+        return {
+            'labels': labels,
+            'sales': sales
+        }
 
 class CustomerSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')

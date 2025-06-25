@@ -89,13 +89,17 @@ function CustomerProfile() {
   };
 
   if (loading) {
-    return <div className="text-center mt-10">Loading customer profile...</div>;
+    return (
+    <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="margin-lt font-bold text-center mt-10">Loading customer profile...</div>
+    </DashboardLayout>
+    );
   }
 
   return (
     <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md margin-lt">
-        <h2 className="text-2xl font-bold mb-6 text-center">Edit Customer Profile</h2>
+      <div className="bg-form p-8 rounded-form shadow-md margin-lt">
+        <h2 className="text-2xl font-bold mb-6 text-center text-white">Edit Customer Profile</h2>
 
         {success && <p className="text-green-600 mb-4 text-center">Profile updated successfully!</p>}
         {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
@@ -103,40 +107,40 @@ function CustomerProfile() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             {/* <label className="block text-gray-700">Address Line 1</label> */}
-            <input type="text" name="address1" value={formData.address1} onChange={handleChange} placeholder='Address Line 1' required className="w-full mt-1 p-2 border rounded-md" />
+            <input type="text" name="address1" value={formData.address1} onChange={handleChange} placeholder='Address Line 1' required className="text-white w-full mt-1 p-2 border rounded-md" />
           </div><br />
 
           <div>
             {/* <label className="block text-gray-700">Address Line 2 (optional)</label> */}
-            <input type="text" name="address2" value={formData.address2} onChange={handleChange} placeholder='Address Line 2' className="w-full mt-1 p-2 border rounded-md" />
+            <input type="text" name="address2" value={formData.address2} onChange={handleChange} placeholder='Address Line 2' className="text-white w-full mt-1 p-2 border rounded-md" />
           </div><br />
 
           <div>
             {/* <label className="block text-gray-700">City</label> */}
-            <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder='city' required className="w-full mt-1 p-2 border rounded-md" />
+            <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder='city' required className="text-white w-full mt-1 p-2 border rounded-md" />
           </div><br />
 
           <div>
             {/* <label className="block text-gray-700">State</label> */}
-            <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder='state' required className="w-full mt-1 p-2 border rounded-md" />
+            <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder='state' required className="text-white w-full mt-1 p-2 border rounded-md" />
           </div><br />
 
           <div>
             {/* <label className="block text-gray-700">Pincode</label> */}
-            <input type="text" name="pincode" value={formData.pincode} onChange={handleChange} placeholder='pincode' required className="w-full mt-1 p-2 border rounded-md" />
+            <input type="text" name="pincode" value={formData.pincode} onChange={handleChange} placeholder='pincode' required className="text-white w-full mt-1 p-2 border rounded-md" />
           </div><br />
 
           <div>
             {/* <label className="block text-gray-700">Country</label> */}
-            <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder='country' required className="w-full mt-1 p-2 border rounded-md" />
+            <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder='country' required className="text-white w-full mt-1 p-2 border rounded-md" />
           </div><br />
 
           <div>
             {/* <label className="block text-gray-700">Phone</label> */}
-            <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder='phone' required className="w-full mt-1 p-2 border rounded-md" />
+            <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder='phone' required className="text-white w-full mt-1 p-2 border rounded-md" />
           </div><br />
 
-          <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
+          <button type="submit" className="w-full bg-violet-500 hover:bg-violet-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
             Save Profile
           </button>
         </form>

@@ -18,7 +18,6 @@ function SellerProfileForm() {
   // ✨ On page load, fetch seller data
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log('Fetched token:', token);
   
     if (!token) {
       throw new Error('No authentication token found. Please log in.');
@@ -38,7 +37,6 @@ function SellerProfileForm() {
         return response.json(); // <<< Convert response to JSON
       })
       .then(data => {
-        console.log('Fetched data:', data);
         setFormData({
           company_name: data.company_name || '',
           company_address: data.company_address || '',
@@ -91,12 +89,14 @@ function SellerProfileForm() {
   };  
 
   if (loading) {
-    return <div className="text-center mt-10">Loading seller profile...</div>;
+    <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="margin-lt font-bold text-center mt-10">Seller Profile Loading ...</div>
+    </DashboardLayout>
   }
 
   return (
     <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md margin-lt">
+      <div className="bg-form text-white p-8 rounded-form shadow-md max-w-lg margin-lt">
         <h2 className="text-2xl font-bold mb-6 text-center">Edit Seller Profile</h2>
         
         {success && <p className="text-green-600 mb-4 text-center">Profile updated successfully!</p>}
@@ -105,59 +105,59 @@ function SellerProfileForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Company Name */}
           <div>
-            <label className="block text-gray-700">Company Name</label>
+            <label className="block text-blue">Company Name</label>
             <input
               type="text"
               name="company_name"
               value={formData.company_name}
               onChange={handleChange}
               required
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white w-full mt-1 p-2 border rounded-md "
             />
           </div>
 
           {/* Company Address */}
           <div>
-            <label className="block text-gray-700">Company Address</label>
+            <label className="block text-blue">Company Address</label>
             <textarea
               name="company_address"
               value={formData.company_address}
               onChange={handleChange}
               required
               rows="3"
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-form text-white w-full mt-1 p-2 border rounded-md "
             />
           </div>
 
           {/* Phone Number */}
           <div>
-            <label className="block text-gray-700">Phone Number</label>
+            <label className="block text-blue">Phone Number</label>
             <input
               type="text"
               name="phone_number"
               value={formData.phone_number}
               onChange={handleChange}
               required
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white w-full mt-1 p-2 border rounded-md "
             />
           </div>
 
           {/* Website */}
           <div>
-            <label className="block text-gray-700">Website (optional)</label>
+            <label className="block text-blue">Website (optional)</label>
             <input
               type="url"
               name="website"
               value={formData.website}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white w-full mt-1 p-2 border rounded-md "
             />
           </div><br />
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
+            className="w-full bg-violet-500 hover:bg-violet-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
           >
             Save Profile
           </button>

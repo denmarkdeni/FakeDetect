@@ -28,7 +28,7 @@ function CartPage() {
   };
 
   const handleBuy = (id) => {
-    alert("You bought the product! 🎉"); 
+    navigate(`/product/${id}`);
   };
 
   return (
@@ -43,7 +43,7 @@ function CartPage() {
               <h3>{item.product.name}</h3>
               <p>Price: ₹{item.product.price}</p>
               <p>Qty: {item.quantity}</p>
-              <button onClick={() => handleBuy(item.id)}>Buy</button>
+              <button onClick={() => handleBuy(item.product.id)}>More Details</button>
               <button onClick={() => handleRemove(item.id)}>Remove</button>
             </div>
           ))}

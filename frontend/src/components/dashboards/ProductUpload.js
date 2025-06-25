@@ -67,8 +67,8 @@ const ProductUpload = () => {
 
   return (
     <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-50 max-w-lg margin-lt">
-        <h2 className="text-2xl font-bold mb-6 text-center">Upload Product</h2>
+      <div className="bg-form p-8 rounded-form shadow-md max-w-lg margin-lt">
+        <h2 className="text-2xl font-bold mb-6 text-center text-white">Upload Product</h2>
 
         {success && (
           <p className="text-green-600 mb-4 text-center">Product uploaded successfully!</p>
@@ -78,78 +78,78 @@ const ProductUpload = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Product Name */}
           <div>
-            <label className="block text-gray-700">Product Name</label>
+            <label className="block text-blue">Product Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white w-full mt-1 p-2 border rounded-md "
             />
           </div>
 
           {/* Brand */}
           <div>
-            <label className="block text-gray-700">Brand (optional)</label>
+            <label className="block text-blue">Brand (optional)</label>
             <input
               type="text"
               name="brand"
               value={formData.brand}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white w-full mt-1 p-2 border rounded-md "
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-gray-700">Description</label>
+            <label className="block text-blue">Description</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
               required
               rows="4"
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white bg-form w-full mt-1 p-2 border rounded-md "
             />
           </div>
 
           {/* Price */}
           <div>
-            <label className="block text-gray-700">Price</label>
+            <label className="block text-blue">Price</label>
             <input
               type="number"
               name="price"
               value={formData.price}
               onChange={handleChange}
               required
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white w-full mt-1 p-2 border rounded-md "
             />
           </div>
 
           {/* Category */}
           <div>
-            <label className="block text-gray-700">Category</label>
+            <label className="block text-blue">Category</label>
             <input
               type="text"
               name="category"
               value={formData.category}
               onChange={handleChange}
               required
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white w-full mt-1 p-2 border rounded-md "
             />
           </div>
 
           {/* Image Upload */}
           <div>
-            <label className="block text-gray-700">Product Image</label>
+            <label className="block text-blue">Product Image</label>
             <input
               type="file"
               name="image"
               onChange={handleChange}
               ref={fileInputRef}
               accept="image/*"
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-white w-full mt-1 p-2 border rounded-md "
             />
           </div><br />
 

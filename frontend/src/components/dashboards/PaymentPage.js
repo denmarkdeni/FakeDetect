@@ -34,7 +34,7 @@ const PaymentPage = () => {
 
     setSuccess(true);
   };
-
+ 
   return (
     <DashboardLayout>
       <div className="payment-container">
@@ -75,8 +75,8 @@ const PaymentPage = () => {
 
         <button className="pay-btn" onClick={handlePayment}>
           Confirm Payment
-        </button>
-        <button className="back-button" onClick={() => navigate(-1)}>
+        </button><br /><br />
+        <button className="pay-btn" onClick={() => navigate(-1)}>
           Back
         </button>
 

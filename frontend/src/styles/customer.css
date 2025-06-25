@@ -238,7 +238,7 @@ body {
 .btn-add,
 .btn-buy,
 .btn-flag {
-  /* padding: 10px 20px; */
+  padding: 10px 20px; 
   border: none;
   cursor: pointer;
   font-weight: bold;
@@ -246,12 +246,12 @@ body {
 }
 
 .btn-add {
-  background-color: #007bff;
+  background-color: #41417e;
   color: white;
 }
 
 .btn-add:hover {
-  background-color: #1c4f86;
+  background-color: #1e1e2f;
 }
 
 .btn-buy {
@@ -261,19 +261,19 @@ body {
 
 .btn-buy:hover {
   background-color: #19640f;
-}
+}   
 
 .btn-flag {
-  background-color: #f1ce83;
+  background-color: #c2bbbb;
   color: white;
 }
 
 .btn-flag:hover {
-  background-color: #e08e5e;
+  background-color: #777272;
 }
 
 .cart-icon img {
-  border: rgb(60, 255, 0) 2px solid;
+  border: #1e1e2f 2px solid;
   padding: 5px;
   border-radius: 30%;
   width: 50px;
@@ -297,7 +297,7 @@ body {
 .order-card {
   display: flex;
   align-items: center;
-  background-color: rgba(103, 101, 168, 0.5);
+  background-color: #1e1e2f;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -325,10 +325,10 @@ body {
 .order-details h3 {
   margin: 0 0 10px 0;
   font-size: 20px;
-  color: #333;
+  color: #7ac1e2;
 }
 
 .order-details p {
   margin: 4px 0;
-  color: #555;
+  color: #dbd5d5;
 }

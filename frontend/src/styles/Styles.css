@@ -142,7 +142,7 @@
 
 .main-content {
   flex: 1;
-  background: radial-gradient(#ffffff, #5b5c83a3);
+  background: #5b5c83a3;
   padding: 1.5rem;
 }
 
@@ -157,6 +157,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  border-radius: 10px;
 }
 
 .header-title {
@@ -207,6 +208,22 @@
   background: #e33e3f;
 }
 
+.back-button{
+  display: block;
+  margin-top: 20px;
+  width: 120px;
+  padding: 5px 5px;
+  background-color: #393958;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #2b2853;
+}
 
 @media (max-width: 768px) {
   .sidebar {

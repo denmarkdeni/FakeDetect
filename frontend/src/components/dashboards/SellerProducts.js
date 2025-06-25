@@ -34,52 +34,55 @@ const ProductListPage = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+   <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="margin-lt font-bold text-center mt-10">Loading ...</div>
+    </DashboardLayout>
   }
 
   if (error) {
-    return <p>{error}</p>;
+    <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="margin-lt font-bold text-center mt-10">{error}</div>
+    </DashboardLayout>
   }
 
   return (
-    <DashboardLayout className="container mx-auto p-6">
+    <DashboardLayout className="container mx-auto p-6 bg-gray"><br />
         <h2 className="text-2xl font-bold mb-6">Product List</h2>
 
-        <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+            <table className="w-full bg-form text-white rounded-form shadow-md">
             <thead>
-                <tr className="bg-gray-100">
-                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-600">Product Name</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-600">Brand</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-600">Category</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-600">Price</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-600">Trust Score</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-600">Fake Flags</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-600">Verified Source</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-600">Actions</th>
+                <tr>
+                <th className="py-4 px-4 text-left text-sm font-semibold ">Product Name</th>
+                <th className="py-4 px-4 text-left text-sm font-semibold">Brand</th>
+                <th className="py-4 px-4 text-left text-sm font-semibold">Category</th>
+                <th className="py-4 px-4 text-left text-sm font-semibold">Price</th>
+                <th className="py-4 px-4 text-left text-sm font-semibold">Trust Score</th>
+                <th className="py-4 px-4 text-left text-sm font-semibold">Fake Flags</th>
+                <th className="py-4 px-4 text-left text-sm font-semibold">Verified Source</th>
+                <th className="py-4 px-4 text-left text-sm font-semibold">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {products.map((product) => (
                 <tr key={product.id} className="border-t">
-                    <td className="py-2 px-4 text-sm text-gray-700">{product.name}</td>
-                    <td className="py-2 px-4 text-sm text-gray-700">{product.brand || 'N/A'}</td>
-                    <td className="py-2 px-4 text-sm text-gray-700">{product.category}</td>
-                    <td className="py-2 px-4 text-sm text-gray-700">₹{product.price}</td>
-                    <td className="py-2 px-4 text-sm text-gray-700">{product.trust_score}</td>
-                    <td className="py-2 px-4 text-sm text-gray-700">
+                    <td className="py-4 px-4 text-sm text-gray-700">{product.name}</td>
+                    <td className="py-4 px-4 text-sm text-gray-700">{product.brand || 'N/A'}</td>
+                    <td className="py-4 px-4 text-sm text-gray-700">{product.category}</td>
+                    <td className="py-4 px-4 text-sm text-gray-700">₹{product.price}</td>
+                    <td className="py-4 px-4 text-sm text-gray-700">{product.trust_score}</td>
+                    <td className="py-4 px-4 text-sm text-gray-700">
                     {product.fake_flags} {product.is_fake ? '(Fake)' : ''}
                     </td>
-                    <td className="py-2 px-4 text-sm text-gray-700">
+                    <td className="py-4 px-4 text-sm text-gray-700">
                     {product.verified_source ? (
                         <span className="text-green-500">(Verified)</span>
                     ) : (
                         <span className="text-red-500">(Not Verified)</span>
                     )}
                     </td>
-                    <td className="py-2 px-4 text-sm text-gray-700">
+                    <td className="py-4 px-4 text-sm text-gray-700">
                     <a
-                        href={`/products/${product.id}`}
+                        href={`/product/${product.id}`}
                         className="text-blue-500 hover:text-blue-700"
                     >
                         View Details
@@ -89,7 +92,6 @@ const ProductListPage = () => {
                 ))}
             </tbody>
             </table>
-        </div>
     </DashboardLayout>
   );
 };

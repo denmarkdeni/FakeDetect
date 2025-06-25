@@ -85,14 +85,14 @@ export default function ProductDetails() {
 
   if (error)
     return (
-      <DashboardLayout>
-        <div>{error}</div>
+      <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className="margin-lt font-bold text-center mt-10">{error}</div>
       </DashboardLayout>
     );
   if (!product)
     return (
-      <DashboardLayout>
-        <div>Loading...</div>
+      <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className="margin-lt font-bold text-center mt-10">Loading ...</div>
       </DashboardLayout>
     );
 
@@ -100,9 +100,7 @@ export default function ProductDetails() {
     <DashboardLayout>
       <div className="product-details-container">
         <div className="cart-icon" title="Cart List">
-        <Link to={"/cart"}>
-          <img src="https://cdn-icons-png.freepik.com/512/891/891468.png?ga=GA1.1.2114069533.1739445730" ></img>
-        </Link>
+        
         </div>
         <div className="product-img">
           <img
@@ -111,7 +109,7 @@ export default function ProductDetails() {
           />
         </div>
         <div className="product-infos">
-          <h2>{product.name}</h2>
+          <h2 className="font-bold">{product.name}</h2>
           <p>
             <strong>Brand:</strong> {product.brand}
           </p>

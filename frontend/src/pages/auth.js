@@ -77,7 +77,7 @@ const AuthForm = () => {
     <div className="auth-container">
       <div className={`cont ${isSignup ? "s-signup" : ""}`}>
         <form className="form sign-in" onSubmit={handleLogin}>
-          <h2>Sign In</h2>
+          <h2>Sign In</h2><br /> <br />
           <label>
             <span>User Name </span>
             <input
@@ -101,7 +101,7 @@ const AuthForm = () => {
             Sign In
           </button>
 
-          <div className="social-media">
+          {/* <div className="social-media">
             <ul>
               <li>
                 <img src="assets/images/envelope-blue.png" alt="facebook" />
@@ -116,7 +116,7 @@ const AuthForm = () => {
                 <img src="assets/images/email.png" alt="instagram" />
               </li>
             </ul>
-          </div>
+          </div> */}
         </form>
 
         <div className="sub-cont">

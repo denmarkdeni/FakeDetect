@@ -34,7 +34,7 @@ const CustomerProducts = () => {
   }, []);
 
   return (
-    <DashboardLayout className="customer-products-container">
+    <DashboardLayout className="customer-products-container"><br />
       <h2 className="customer-products-title">Available Products</h2>
 
       {error && <p className="product-description">{error}</p>}

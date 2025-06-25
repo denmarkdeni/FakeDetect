@@ -2,7 +2,7 @@
     max-width: 600px;
     margin: 50px auto;
     padding: 30px;
-    background: linear-gradient(#7a7ae3, azure);
+    background: #7a7ae3;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     text-align: center;
@@ -28,7 +28,7 @@
   }
   
   .pay-btn {
-    background-color: #2980b9;
+    background-color: #1e1e2f;
     color: white;
     padding: 2px 24px;
     border: none;
@@ -39,7 +39,7 @@
   }
   
   .pay-btn:hover {
-    background-color: #1c5980;
+    background-color: #434364;
   }
   
   .success-msg {

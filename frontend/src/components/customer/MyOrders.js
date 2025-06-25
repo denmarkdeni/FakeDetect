@@ -24,17 +24,17 @@ function MyOrders() {
   }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout ><br />
       <h1 style={{ textAlign: "center" }}>My Orders</h1>
 
       {loading ? (
-        <p>Loading your orders...</p>
+        <p className="text-center font-bold">Loading your orders...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : orders.length > 0 ? (
         <div className="order-list">
           {orders.map((order) => (
-            <div key={order.id} className="order-card">
+            <div key={order.id} className="order-card ">
               <img
                 src={`http://127.0.0.1:8000${order.product.image}`}
                 alt={order.product.name}

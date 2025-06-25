@@ -4,6 +4,8 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import 'animate.css';
 import CircularProgress from '../layout/CircularProgress';
+import API from '../../api/api';
+import axios from 'axios';
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -15,7 +17,7 @@ export default function SellerDashboard() {
     datasets: [
       {
         label: 'Sales ($)',
-        data: [1200, 1900, 3000, 2500, 4000, 3500],
+        data: [0, 0, 0, 0, 0, 0],
         backgroundColor: 'rgba(59, 130, 246, 0.5)',
         borderColor: 'rgb(8, 40, 90)',
         borderWidth: 1,
@@ -23,33 +25,73 @@ export default function SellerDashboard() {
     ],
   });
 
-  const [creditScore, setCreditScore] = useState(85);
-  const [isTrusted, setIsTrusted] = useState(creditScore >= 80);
-
-  // Animation for credit score
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCreditScore((prev) => {
-        const newScore = prev >= 85 ? prev : prev + 1;
-        setIsTrusted(newScore >= 80);
-        return newScore;
-      });
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
-
   // Chart options for animation
   const chartOptions = {
     responsive: true,
     plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Monthly Sales Performance' },
+      legend: { position: 'top', labels: { color: 'white' } },
+      title: { display: true, text: 'Monthly Sales Performance', color: 'white' },
+    },
+    scales: {
+      x: { ticks: { color: 'white' } },
+      y: { ticks: { color: 'white' } },
     },
     animation: {
       duration: 2000,
       easing: 'easeOutBounce',
     },
   };
+
+  // Chart options for animation
+  // const chartOptions = {
+  //   responsive: true,
+  //   plugins: {
+  //     legend: { position: 'top' },
+  //     title: { display: true, text: 'Monthly Sales Performance' },
+  //   },
+  //   animation: {
+  //     duration: 2000,
+  //     easing: 'easeOutBounce',
+  //   }, 
+  // };
+
+  const [creditScore, setCreditScore] = useState(0);
+  const [isTrusted, setIsTrusted] = useState(creditScore >= 80);
+
+  // Animation for credit score
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    axios.get('http://127.0.0.1:8000/api/seller/profile/',{
+      headers:{
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(response => { 
+      console.log(response.data);
+      
+      setCreditScore(response.data.trust_rating || 0);
+      setIsTrusted(response.data.trust_rating >= 80);
+      setSalesData({
+        labels: response.data.monthly_sales.labels,
+        datasets: [
+          {
+            label: 'Sales (₹)',
+            data: response.data.monthly_sales.sales,
+            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+            borderColor: 'rgb(8, 40, 90)',
+            borderWidth: 1,
+          },
+        ],
+      });
+    })
+    .catch(error => {
+      console.error('Error In Fake Detect:' , error);
+    })
+    
+  }, []);
+
 
   return (
     <DashboardLayout title="Seller Dashboard">
@@ -59,7 +101,7 @@ export default function SellerDashboard() {
         <div className="credit-score">
           
           <div className="flex flex-col space-y-2">
-            <h2 className="text-lg font-semibold">Your Credit Score</h2>
+            <h2 className="text-lg font-semibold">Your Credit Score</h2><br />
             <div className="text-sm text-gray-600">
               {creditScore >= 80 
                 ? '✅ You are a trusted seller! 🚀' 
@@ -76,11 +118,11 @@ export default function SellerDashboard() {
             <CircularProgress value={creditScore} />
           </div>
 
-        </div>
+        </div><br />
 
         {/* Sales Chart */}
-        <div className="bg-white p-8 rounded-lg shadow-md animate__animated animate__slideInLeft">
-          <h2 className="text-lg font-semibold mb-3">Your Sales Overview</h2>
+        <div className="bg-form p-8 rounded-form shadow-md animate__animated animate__slideInLeft">
+          <h2 className="text-white font-semibold mb-3">Your Sales Overview</h2>
           <Bar data={salesData} options={chartOptions} />
         </div>
 

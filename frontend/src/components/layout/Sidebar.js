@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Styles.css';
 import 'animate.css';
 import { FiHome, FiUser, FiShoppingBag, FiBox, FiLogOut, FiSearch } from 'react-icons/fi';
+import { MdShoppingCart } from "react-icons/md";
 
 export default function Sidebar() {
   const [animate, setAnimate] = useState(false);
@@ -51,6 +52,11 @@ export default function Sidebar() {
                 <FiShoppingBag className="sidebar-icon" /> My Orders
               </Link>
             </li>
+            <li>
+              <Link to="/cart" className="sidebar-link">
+                <MdShoppingCart className="sidebar-icon" /> Cart List
+              </Link>
+            </li>
           </>
         )}
         {role === 'seller' && (
@@ -78,7 +84,7 @@ export default function Sidebar() {
           </>
         )}
         <li>
-          <Link onClick={handleLogout} to="/login" className="sidebar-link logout-link">
+          <Link onClick={handleLogout} to="/auth" className="sidebar-link logout-link">
             <FiLogOut className="sidebar-icon" /> Logout
           </Link>
         </li>
