@@ -272,21 +272,6 @@ body {
   background-color: #777272;
 }
 
-.cart-icon img {
-  border: #1e1e2f 2px solid;
-  padding: 5px;
-  border-radius: 30%;
-  width: 50px;
-  height: 50px;
-  margin-right: 5px;
-  position: absolute;
-  right: 10%;
-}
-
-.cart-icon img:hover {
-  transform: scale(1.1);
-}
-
 .order-list {
   display: flex;
   flex-direction: column;

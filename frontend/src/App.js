@@ -14,6 +14,8 @@ import CartPage from "./components/dashboards/CartList";
 import PaymentPage from "./components/dashboards/PaymentPage";
 import AuthForm from "./pages/auth";
 import MyOrders from "./components/customer/MyOrders";
+import VerifyEmailPrompt from "./pages/VerifyEmailPrompt";
+import EmailVerified from "./pages/EmailVerified";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<AuthForm />} />
+        <Route path="/verify-email-prompt" element={<VerifyEmailPrompt />} />
+        <Route path="/email-verified" element={<EmailVerified />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/customer-dashboard" element={<CustomerDashboard />} />
         <Route path="/seller-dashboard" element={<SellerDashboard />} />

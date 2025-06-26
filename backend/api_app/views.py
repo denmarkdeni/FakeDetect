@@ -1,14 +1,32 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth import login
 from rest_framework.permissions import AllowAny
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils import timezone
 from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists, Payment
 from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer
 from .serializers import CustomerSerializer, CartSerializer, OrderSerializer, FlagListSerializer
+
+class VerifyEmailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, token):
+        try:
+            account = Accounts.objects.get(verification_token=token)
+            if not account.is_verified:
+                account.is_verified = True
+                account.verified_at = timezone.now()
+                account.save()
+                return redirect(f"{settings.FRONTEND_URL}/email-verified")
+            return redirect(f"{settings.FRONTEND_URL}/email-verified?error=already_verified")
+        except Accounts.DoesNotExist:
+            return redirect(f"{settings.FRONTEND_URL}/email-verified?error=invalid_token")
 
 class RegisterView(APIView):
     permission_classes = [IsAuthenticated | AllowAny]
@@ -18,11 +36,25 @@ class RegisterView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             token, _ = Token.objects.get_or_create(user=user)
+            account = Accounts.objects.get(user=user)
             if user.accounts.role == 'customer':
                 Customer.objects.create(user=user)
             elif user.accounts.role == 'seller':
                 Seller.objects.create(user=user)
-            return Response({"token": token.key}, status=status.HTTP_201_CREATED)
+
+            # Send verification email
+            verification_link = f"{settings.BACKEND_URL}/verify-email/{account.verification_token}"
+            subject = 'Verify Your Email for FakeDetect'
+            message = f'Hi {user.username},\n\nPlease verify your email by clicking the link below:\n{verification_link}\n\nThank you,\CrediPlus Team'
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [user.email],
+                fail_silently=False,
+            )
+
+            return Response({"token": token.key, "message": "Registration successful. Please check your email to verify your account."}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
@@ -32,14 +64,19 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data
+            if not user.accounts.is_verified:
+                return Response(
+                    {"error": "Please verify your email before logging in."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
             login(request, user)
             token, _ = Token.objects.get_or_create(user=user)
-
+            
             if request.user.is_superuser:
                 role = 'admin'
             else:
                 role = user.accounts.role
-            return Response({"token": token.key,"role":role,"username":user.username}, status=status.HTTP_200_OK)
+            return Response({"token": token.key,"role":role,"username":user.username,"isVerified":user.accounts.is_verified}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SellerProfileView(APIView):
@@ -88,7 +125,6 @@ class CustomerProfileView(APIView):
     def get(self, request):
         customer = request.user.customer
         serializer = CustomerSerializer(customer)
-        print(serializer.data)
         return Response(serializer.data)
     
     def put(self, request):
@@ -107,7 +143,6 @@ class ProductDetailView(APIView):
         try:
             product = Product.objects.get(pk=pk)
             serializer = ProductSerializer(product)
-            print(serializer.data)
             return Response(serializer.data)
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)
@@ -152,7 +187,6 @@ class CartListView(APIView):
         try:
             cart_items = Cart.objects.filter(customer=request.user.customer)
             serializer = CartSerializer(cart_items, many=True)
-            print(serializer.data)
             return Response(serializer.data, status=200)
         except:
             return Response({'error': 'No cart found for user'}, status=404)
@@ -200,7 +234,6 @@ class HomePageView(APIView):
     def get(self, request):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
-        print(serializer.data)
         return Response(serializer.data, status=200)    
     
 class MyOrdersView(APIView):

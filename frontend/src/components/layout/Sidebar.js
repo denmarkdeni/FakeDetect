@@ -27,7 +27,7 @@ export default function Sidebar() {
   return (
     <div className={`sidebar ${animate ? 'animate__animated animate__slideInLeft' : ''}`}>
       <Link to="/" className="sidebar-title-link">
-        <h2 className="sidebar-title" >🛡️ CrediPlus</h2>
+        <h2 className="sidebar-title" ><img src="/assets/images/crediscan.png" alt="" style={{ width:'40px' }} /> CrediPlus</h2>
       </Link>
       <ul className="sidebar-list">
         {role === 'customer' && (

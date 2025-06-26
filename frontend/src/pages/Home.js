@@ -78,7 +78,7 @@ export default function Home() {
         <title>CrediScan</title>
       </Helmet>
 
-      <div className="hero_area">
+      <div className="hero_area bg-center" style={{ backgroundImage: "url('/assets/images/trust-bg.jpg')" }}>
         {/* Header Section */}
         <header className="header_section">
           <div className="container">
@@ -117,7 +117,7 @@ export default function Home() {
           <div className="container-fluid">
             <nav className="navbar navbar-expand-lg custom_nav-container pt-3">
               <a className="navbar-brand" href="/">
-                <img src="/assets/images/logo.png" alt="" />
+                <img src="/assets/images/crediscan.png" alt="" />
                 <span>CrediScan</span>
               </a>
               <button
@@ -170,13 +170,13 @@ export default function Home() {
                     </li>
                   </ul>
 
-                  <form className="form-inline">
+                  {/* <form className="form-inline">
                     <input type="search" placeholder="Search" />
                     <button
                       className="btn my-2 my-sm-0 nav_search-btn"
                       type="submit"
                     ></button>
-                  </form>
+                  </form> */}
 
                   <div className="login_btn-contanier ml-0 ml-lg-5">
                     <Link to="/auth">
@@ -333,7 +333,7 @@ export default function Home() {
         <div className="health_carousel-container">
           <h2 className="text-uppercase">TOP PICKS</h2>
           <div className="product-grid">
-            {products.map((product, index) => (
+            {products.slice(0, 4).map((product, index) => (
               <div className="item" key={index}>
                 <div className="box">
                   <div className="btn_container">
@@ -345,7 +345,7 @@ export default function Home() {
                       alt={product.name}
                     />
                   </div>
-                  <div className="detail-box">
+                  <div className="detail-box flex">
                     <div className="star_container">
                       {[...Array(4)].map((_, index) => (
                         <i className="fa fa-star" key={index}></i>
@@ -365,27 +365,70 @@ export default function Home() {
             ))}
           </div>
         </div>
+        <div className="item more-btn">
+          <div className="box">
+            <a href="/all-products" className="btn more-btn">
+              More
+            </a>
+          </div>
+        </div>
       </section>
+
+      
 
       {/* Reviews Section */}
       <section className="health_section layout_padding">
         <div className="health_carousel-container">
           <h2 className="text-uppercase">REVIEWS & FEEDBACKS</h2>
-          <div className="carousel-wrap layout_padding2">
-            {/* <div className="owl-carousel owl-2"> */}
-              <div className="item">
+          <div className="product-grid">
+            {products.slice(0, 4).map((product, index) => (
+              <div className="item" key={index}>
                 <div className="box">
-                  <div className="btn_container">
-                    <a href="#">Buy Now</a>
-                  </div>
                   <div className="img-box">
-                    <img src="/assets/images/p-6.jpg" alt="Review" />
+                    <img
+                      src={`http://127.0.0.1:8000${product.image}`}
+                      alt={product.name}
+                    />
                   </div>
-                  {/* You can add detail-box here for reviews */}
+                  <div className="detail-box">
+                    <div className="flag-status">
+                      {product.is_fake ? (
+                        <span className="text-red-500">Flagged as Fake</span>
+                      ) : product.fake_flags > 0 ? (
+                        <span className="text-yellow-500">Suspected Fake ({product.fake_flags} flags)</span>
+                      ) : (
+                        <span className="text-green-500">Verified Authentic</span>
+                      )}
+                    </div>
+                    <div className="review-text">
+                      <p><strong>{product.name} ({product.brand})</strong></p>
+                      {product.flag_comments.length > 0 ? (
+                        <p><strong>Feedback:</strong> {product.flag_comments[0].reason}</p>
+                      ) : (
+                        <p>No feedback yet</p>
+                      )}
+                    </div>
+                    <div className="star_container">
+                      {[...Array(Math.min(Math.floor(product.trust_score / 20), 5))].map((_, i) => (
+                        <i className="fa fa-star" key={i}></i>
+                      ))}
+                      {product.trust_score % 20 !== 0 && product.trust_score < 100 && <i className="fa fa-star-half-o"></i>}
+                      {[...Array(5 - Math.ceil(product.trust_score / 20))].map((_, i) => (
+                        <i className="fa fa-star-o" key={i + Math.floor(product.trust_score / 20) + (product.trust_score % 20 !== 0 ? 1 : 0)}></i>
+                      ))}
+                      <span className="ml-2">({product.trust_score}/100)</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              {/* Add more review items as needed */}
-            {/* </div> */}
+            ))}
+          </div>
+        </div>
+        <div className="item more-btn">
+          <div className="box">
+            <a href="/all-reviews" className="btn more-link">
+              More
+            </a>
           </div>
         </div>
       </section>

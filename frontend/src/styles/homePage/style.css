@@ -58,7 +58,6 @@ body {
 /*header section*/
 .hero_area {
   height: 100vh;
-  background-image: url("./images/hero-bg.jpg");
 }
 
 .sub_page .hero_area {
@@ -269,13 +268,9 @@ a:focus {
 
 .slider_section .detail-box h1 span {
   font-size: 4rem;
-  color: #ffffff;
   font-weight: bold;
 }
 
-.slider_section .detail-box p {
-  color: #ffffff;
-}
 
 .slider_section .detail-box a {
   display: inline-block;
@@ -551,7 +546,6 @@ a:focus {
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
@@ -869,3 +863,26 @@ a:focus {
 
 /* end footer section*/
 /*# sourceMappingURL=style.css.map */
+
+.more-btn .box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0 40%;
+  border: none;
+}
+
+.more-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Green color, adjustable */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.more-link:hover {
+  background-color: #45a049; /* Darker green on hover */
+}

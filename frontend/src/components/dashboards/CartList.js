@@ -32,7 +32,7 @@ function CartPage() {
   };
 
   return (
-    <DashboardLayout className="cart-container">
+    <DashboardLayout title={"Cart List"} className="cart-container">
       <br /><h2>Your Cart List</h2>
       <button className="back-button" onClick={() => navigate(-1)}>Back</button><br />
       {cartItems.length === 0 ? <p>No items in cart.</p> : (

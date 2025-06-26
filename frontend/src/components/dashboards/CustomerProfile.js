@@ -97,7 +97,7 @@ function CustomerProfile() {
   }
 
   return (
-    <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <DashboardLayout title={"Customer Profile"} className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="bg-form p-8 rounded-form shadow-md margin-lt">
         <h2 className="text-2xl font-bold mb-6 text-center text-white">Edit Customer Profile</h2>
 

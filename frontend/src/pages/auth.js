@@ -36,8 +36,15 @@ const AuthForm = () => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("username", res.data.username);
-      alert("✅ Logged in successfully!");
 
+      if (!res.data.isVerified) {
+        navigate("/verify-email-prompt");
+        alert("⚠️ Please verify your email to continue.");
+        return;
+      }
+
+      alert("✅ Logged in successfully!");
+      
       if (res.data.role === "customer") {
         navigate("/customer-dashboard");
       } else if (res.data.role === "seller") {
@@ -49,7 +56,12 @@ const AuthForm = () => {
       }
     } catch (err) {
       console.error(err);
-      alert("❌ Login failed. Please check your credentials.");
+      if (err.response && err.response.status === 403) {
+        navigate("/verify-email-prompt");
+        alert("⚠️ " + err.response.data.error);
+      } else {
+        alert("❌ Login failed. Please check your credentials.");
+      }
     }
   };
 
@@ -59,7 +71,7 @@ const AuthForm = () => {
     try {
       const res = await API.post("register/", registerData);
       localStorage.setItem("token", res.data.token);
-      alert("✅ Registered successfully!");
+      alert("✅ Registered successfully! Please check your email to verify your account.");
       setRegisterData({
         username: "",
         email: "",

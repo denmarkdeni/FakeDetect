@@ -237,3 +237,12 @@
 .credit-score {
   display: flex;
 }
+
+.box-box{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+}

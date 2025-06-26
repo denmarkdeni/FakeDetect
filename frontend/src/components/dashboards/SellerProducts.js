@@ -46,7 +46,7 @@ const ProductListPage = () => {
   }
 
   return (
-    <DashboardLayout className="container mx-auto p-6 bg-gray"><br />
+    <DashboardLayout title={"Products List"} className="container mx-auto p-6 bg-gray"><br />
         <h2 className="text-2xl font-bold mb-6">Product List</h2>
 
             <table className="w-full bg-form text-white rounded-form shadow-md">

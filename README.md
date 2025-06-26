@@ -1,5 +1,14 @@
 This is Fake Detect using Customers to find counterfeit products
 
+## Email Verification
+
+User registers → 
+    Email with verification link sent → 
+        User clicks link → 
+            Backend verifies token, sets isVerified=True → 
+                Redirect to success page → 
+                    User logs in.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

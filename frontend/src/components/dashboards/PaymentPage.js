@@ -36,7 +36,7 @@ const PaymentPage = () => {
   };
  
   return (
-    <DashboardLayout>
+    <DashboardLayout title={"Payment Page"}>
       <div className="payment-container">
         <h2>Payment for {product?.name}</h2>
         <h3>Price: ₹{product?.price}.00</h3>

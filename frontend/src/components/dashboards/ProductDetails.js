@@ -25,6 +25,8 @@ export default function ProductDetails() {
       })
       .then((response) => {
         setProduct(response.data);
+        console.log(response.data);
+        
       })
       .catch((err) => {
         setError("Product not found!");
@@ -97,11 +99,9 @@ export default function ProductDetails() {
     );
 
   return (
-    <DashboardLayout>
-      <div className="product-details-container">
-        <div className="cart-icon" title="Cart List">
+    <DashboardLayout title={"Product Details"}>
+      <div className="product-details-container justify-space">
         
-        </div>
         <div className="product-img">
           <img
             src={`http://127.0.0.1:8000${product.image}`}
@@ -137,7 +137,52 @@ export default function ProductDetails() {
             </button>
           </div>
         </div>
+        <div className="cart-icon right-0" title="Cart List">
+          <Link to={"/customer-products"} className="back-button text-center">
+            Back 
+          </Link>
+        </div>
       </div>
+
+      <div className="product-details-container">
+          <h2 className="font-bold">Seller Details</h2>
+        <div className="box-box">
+          <div className="box-box1">
+            <p>
+              <strong>Name:</strong> {product.seller.username}
+            </p>
+            <p>
+              <strong>Company:</strong> {product.seller.company_name}
+            </p>
+            <p>
+              <strong>Company Address:</strong> {product.seller.company_address}
+            </p>
+          </div>
+          <div className="box-box1">
+            <p>
+              <strong>Trust Rating:</strong> {product.seller.trust_rating}/100
+            </p>
+            <p>
+              <strong>Website:</strong> {product.seller.website}
+            </p>
+            <p>
+              <strong>Total Products:</strong> {product.seller.total_products}
+            </p>
+          </div>
+          <div className="box-box1">
+            <p>
+              <strong>Phone Number:</strong> {product.seller.phone_number}
+            </p>
+            <p>
+              <strong>Fake Flags:</strong> {product.seller.fake_flags}
+            </p>
+            {/* <p>
+              <strong>Total Products:</strong> {product.seller.total_products}
+            </p> */}
+          </div>
+        </div>
+      </div>
+
       <div className="product-details-container">
         <h3>Reviews</h3>
         {product.reviews && product.reviews.length > 0 ? (
@@ -157,6 +202,7 @@ export default function ProductDetails() {
           <p>No reviews yet.</p>
         )}
       </div>
+      
       <div className="product-details-container">
         <h3>Flag Comments</h3>
         {product.flag_comments && product.flag_comments.length > 0 ? (

@@ -24,7 +24,7 @@ function MyOrders() {
   }, []);
 
   return (
-    <DashboardLayout ><br />
+    <DashboardLayout title={"Orders History"}><br />
       <h1 style={{ textAlign: "center" }}>My Orders</h1>
 
       {loading ? (

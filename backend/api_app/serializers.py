@@ -98,12 +98,13 @@ class FlagListSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True, source='review_set')
     flag_comments = FlagListSerializer(many=True, read_only=True, source='flaglists_set')
+    seller = SellerSerializer(read_only=True)
     class Meta:
         model = Product
         fields = [
             'name', 'brand', 'description', 'price', 'category', 'id',
             'image', 'created_at', 'is_fake', 'fake_flags', 'trust_score', 
-            'external_link', 'verified_source', 'reviews','flag_comments'
+            'external_link', 'verified_source', 'reviews','flag_comments', 'seller'
         ]
 
 class CartSerializer(serializers.ModelSerializer):

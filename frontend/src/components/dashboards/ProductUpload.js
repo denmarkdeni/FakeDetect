@@ -66,7 +66,7 @@ const ProductUpload = () => {
   };
 
   return (
-    <DashboardLayout className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <DashboardLayout title={"Product Upload Page"} className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="bg-form p-8 rounded-form shadow-md max-w-lg margin-lt">
         <h2 className="text-2xl font-bold mb-6 text-center text-white">Upload Product</h2>
 
