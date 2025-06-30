@@ -45,6 +45,10 @@ urlpatterns = [
     path('api/payment/<int:pk>/', views.PaymentView.as_view(), name='payment'),
 
     path('api/my-orders/', views.MyOrdersView.as_view(), name='my_orders'),
+
+    path('api/admin/users/', views.UserManagementView.as_view(), name='user_management'),
+    path('api/admin/users/<int:user_id>/', views.UserDetailView.as_view(), name='user_detail'),
+    path('api/admin/users/<int:user_id>/toggle/', views.UserManagementView.as_view(), name='toggle_user'),
 ]
 
 if settings.DEBUG:

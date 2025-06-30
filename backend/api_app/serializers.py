@@ -32,6 +32,50 @@ class LoginSerializer(serializers.Serializer):
         if user:
             return user
         raise serializers.ValidationError("Invalid username or password.")
+    
+class UserManagementSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(source='accounts.role')
+    is_active = serializers.BooleanField()
+    is_verified = serializers.BooleanField(source='accounts.is_verified')
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'role', 'is_active', 'is_verified']
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(source='accounts.role')
+    customer_details = serializers.SerializerMethodField()
+    seller_details = serializers.SerializerMethodField()
+    is_verified = serializers.BooleanField(source='accounts.is_verified')
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'role', 'is_active', 'is_verified', 'customer_details', 'seller_details']
+
+    def get_customer_details(self, obj):
+        if hasattr(obj, 'customer'):
+            return {
+                'address1': obj.customer.address1,
+                'city': obj.customer.city,
+                'state': obj.customer.state,
+                'pincode': obj.customer.pincode,
+                'country': obj.customer.country,
+                'phone': obj.customer.phone,
+                'points': obj.customer.points
+            }
+        return None
+
+    def get_seller_details(self, obj):
+        if hasattr(obj, 'seller'):
+            return {
+                'company_name': obj.seller.company_name,
+                'credit_score': obj.seller.credit_score,
+                'total_products': obj.seller.total_products,
+                'fake_flags': obj.seller.fake_flags,
+                'is_blacklisted': obj.seller.is_blacklisted,
+                'trust_rating': obj.seller.trust_rating()
+            }
+        return None
 
 class SellerSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')

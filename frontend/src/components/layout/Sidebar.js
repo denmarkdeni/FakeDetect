@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Styles.css';
 import 'animate.css';
-import { FiHome, FiUser, FiShoppingBag, FiBox, FiLogOut, FiSearch } from 'react-icons/fi';
+import { FiHome, FiUser, FiShoppingBag, FiBox, FiLogOut, FiSearch, FiUsers } from 'react-icons/fi';
+import { FaUsers } from 'react-icons/fa';
 import { MdShoppingCart } from "react-icons/md";
 
 export default function Sidebar() {
   const [animate, setAnimate] = useState(false);
   const role = localStorage.getItem('role');
   const navigate = useNavigate();
-
+  
   const handleLogout = () => {
     localStorage.clear();
     alert("👋 Logged out!");
@@ -79,6 +80,20 @@ export default function Sidebar() {
             <li>
               <Link to="/product-list" className="sidebar-link">
                 <FiShoppingBag className="sidebar-icon" /> My Products
+              </Link>
+            </li>
+          </>
+        )}
+        {role === 'admin' && (
+          <>
+            <li>
+              <Link to="/admin-dashboard" className="sidebar-link">
+                <FiHome className="sidebar-icon" /> Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/users" className="sidebar-link">
+                <FaUsers className="sidebar-icon" /> Users
               </Link>
             </li>
           </>

@@ -2,16 +2,17 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
 from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists, Payment
 from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer
 from .serializers import CustomerSerializer, CartSerializer, OrderSerializer, FlagListSerializer
+from .serializers import UserManagementSerializer, UserDetailSerializer
 
 class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
@@ -64,19 +65,22 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data
-            if not user.accounts.is_verified:
-                return Response(
-                    {"error": "Please verify your email before logging in."},
-                    status=status.HTTP_403_FORBIDDEN
-                )
+            if not user.is_superuser:
+                if not user.accounts.is_verified:
+                    return Response(
+                        {"error": "Please verify your email before logging in."},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
             login(request, user)
             token, _ = Token.objects.get_or_create(user=user)
             
             if request.user.is_superuser:
                 role = 'admin'
+                isVerified = True
             else:
                 role = user.accounts.role
-            return Response({"token": token.key,"role":role,"username":user.username,"isVerified":user.accounts.is_verified}, status=status.HTTP_200_OK)
+                isVerified = user.accounts.is_verified
+            return Response({"token": token.key,"role":role,"username":user.username,"isVerified":isVerified}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SellerProfileView(APIView):
@@ -98,7 +102,7 @@ class SellerProfileView(APIView):
 class ProductListView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request): 
         # Fetch all products, or filter as needed
         if request.user.accounts.role == 'customer':
             products = Product.objects.all()
@@ -247,3 +251,31 @@ class MyOrdersView(APIView):
         except Order.DoesNotExist:
             return Response({'error' : 'No orders found for user'},status=200)
         
+class UserManagementView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        users = User.objects.all().select_related('accounts')
+        serializer = UserManagementSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+            user.is_active = not user.is_active
+            user.save()
+            serializer = UserManagementSerializer(user)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class UserDetailView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, user_id):
+        try:
+            user = User.objects.select_related('accounts', 'customer', 'seller').get(id=user_id)
+            serializer = UserDetailSerializer(user)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)

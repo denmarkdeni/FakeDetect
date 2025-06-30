@@ -16,6 +16,8 @@ import AuthForm from "./pages/auth";
 import MyOrders from "./components/customer/MyOrders";
 import VerifyEmailPrompt from "./pages/VerifyEmailPrompt";
 import EmailVerified from "./pages/EmailVerified";
+import UserDetail from "./components/admin/UserDetail";
+import UserManagement from "./components/admin/UserManagement";
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/payment-page/:id" element={<PaymentPage />} />
         <Route path="/my-orders" element={<MyOrders />} />
+        <Route path="/admin/users" element={<UserManagement />} />
+        <Route path="/admin/user/:userId" element={<UserDetail />} />
       </Routes>
     </Router>
   );

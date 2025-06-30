@@ -97,26 +97,27 @@ export default function SellerDashboard() {
     <DashboardLayout title="Seller Dashboard">
       <div className="p-4 space-y-4 animate__animated animate__fadeIn">
 
+        <h2 className="text-lg font-semibold">Your Credit Score</h2><br />
+
         {/* Credit Score Section */}
-        <div className="credit-score">
+        <div className="credit-score flex-col-reverse">
           
-          <div className="flex flex-col space-y-2">
-            <h2 className="text-lg font-semibold">Your Credit Score</h2><br />
+          <div className="flex flex-col space-y-2 justify-center">
             <div className="text-sm text-gray-600">
               {creditScore >= 80 
                 ? '✅ You are a trusted seller! 🚀' 
                 : '❌ Boost your score to become trusted.'}
             </div>
+            <div>
+              <CircularProgress value={creditScore} />
+            </div>
             <p className="text-gray-500 text-xs">
                 {isTrusted
-                  ? 'Your high score reflects reliability!'
-                  : 'Fulfill orders on time to improve.'}
-              </p>
+                  ? '😎 Your high score reflects reliability!'
+                  : '😎 Fulfill orders with honesty to improve.'}
+            </p>
           </div>
 
-          <div style={{ marginTop: '1rem' }}>
-            <CircularProgress value={creditScore} />
-          </div>
 
         </div><br />
 
