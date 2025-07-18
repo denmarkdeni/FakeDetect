@@ -98,14 +98,35 @@
   .bg-violet-500 {
     background-color: #363661;
   }
+  .bg-red-500 {
+    background-color: #eb1a24;
+  }
+  .bg-green-500 {
+    background-color: #3c9718;
+  }
   .hover\:bg-violet-600:hover {
     background-color: #646497;
+  }
+  .hover\:bg-red-700:hover {
+    background-color: #b42525;
+  }
+  .hover\:bg-green-700:hover {
+    background-color: #1b5c12;
   }
   .text-white {
     color: #ffffff;
   }
   .text-blue {
     color: #33d8c2;
+  }
+  .text-green {
+    color: #178525;
+  }
+  .text-red {
+    color: #d84633;
+  }
+  .text-gray {
+    color: #999999;
   }
   .font-semibold {
     font-weight: 600;

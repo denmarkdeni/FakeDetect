@@ -125,7 +125,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = [
             'username', 'address1', 'address2', 'city', 'state',
-            'country', 'pincode', 'phone'
+            'country', 'pincode', 'phone','points'
         ]
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -135,9 +135,10 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class FlagListSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='customer.user.username', read_only=True)
+    product_name = serializers.CharField(source='product.name', read_only=True)
     class Meta:
         model = FlagLists
-        fields = ['id', 'customer', 'username', 'reason', 'created_at']
+        fields = ['id', 'customer', 'username','product_name', 'reason','status', 'created_at']
 
 class ProductSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True, source='review_set')

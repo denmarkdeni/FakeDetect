@@ -18,6 +18,8 @@ import VerifyEmailPrompt from "./pages/VerifyEmailPrompt";
 import EmailVerified from "./pages/EmailVerified";
 import UserDetail from "./components/admin/UserDetail";
 import UserManagement from "./components/admin/UserManagement";
+import ProductManagement from "./components/admin/ProductManagement";
+import FlagList from "./components/admin/FlagList";
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function App() {
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/admin/users" element={<UserManagement />} />
         <Route path="/admin/user/:userId" element={<UserDetail />} />
+        <Route path="/admin/products" element={<ProductManagement />} />
+        <Route path="/admin/flags" element={<FlagList />} />
       </Routes>
     </Router>
   );

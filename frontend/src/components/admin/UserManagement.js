@@ -59,23 +59,23 @@ const UserManagement = () => {
                   <span className="text-red-500">(Not Verified)</span>
                 )}
               </td>
-              <td className="py-4 px-4 text-sm text-gray-700">
+              <td className="py-4 px-4 text-sm text-gray">
                 {user.is_active ? (
-                  <span className="text-green-500">Active</span>
+                  <span className="text-green">Active</span>
                 ) : (
-                  <span className="text-red-500">Inactive</span>
+                  <span className="text-red">Inactive</span>
                 )}
               </td>
-              <td className="py-4 px-4 text-sm text-gray-700">
+              <td className="py-4 px-4 text-sm text-gray">
                 <button
                   onClick={() => toggleUserStatus(user.id)}
-                  className="mr-2 text-blue-500 hover:text-blue-700"
+                  className="mr-2 text-blue hover:text-blue-700"
                 >
                   {user.is_active ? 'Deactivate' : 'Activate'}
                 </button>
                 <button
                   onClick={() => viewDetails(user.id)}
-                  className="text-blue-500 hover:text-blue-700"
+                  className="text-blue hover:text-blue-700"
                 >
                   More
                 </button>

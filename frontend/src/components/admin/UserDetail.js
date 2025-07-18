@@ -25,7 +25,7 @@ const UserDetail = () => {
   return (
     <DashboardLayout title="User Details" className="container mx-auto p-6 bg-gray">
       <h2 className="text-2xl font-bold mb-6">User Details - {user.username}</h2>
-      <div className="bg-form text-white rounded-form shadow-md p-6">
+      <div className="bg-form text-white rounded-form shadow-md p-8">
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Role:</strong> {user.role}</p>
         <p><strong>Status:</strong> {user.is_active ? 'Active' : 'Inactive'}</p>

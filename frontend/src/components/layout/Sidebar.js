@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Styles.css';
 import 'animate.css';
 import { FiHome, FiUser, FiShoppingBag, FiBox, FiLogOut, FiSearch, FiUsers } from 'react-icons/fi';
-import { FaUsers } from 'react-icons/fa';
+import { FaFlag, FaListAlt, FaProductHunt, FaUsers } from 'react-icons/fa';
 import { MdShoppingCart } from "react-icons/md";
 
 export default function Sidebar() {
@@ -94,6 +94,16 @@ export default function Sidebar() {
             <li>
               <Link to="/admin/users" className="sidebar-link">
                 <FaUsers className="sidebar-icon" /> Users
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/products" className="sidebar-link">
+                <FaListAlt className="sidebar-icon" /> Products
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/flags" className="sidebar-link">
+                <FaFlag className="sidebar-icon" /> Reports
               </Link>
             </li>
           </>

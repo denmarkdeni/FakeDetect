@@ -46,7 +46,7 @@ class RegisterView(APIView):
             # Send verification email
             verification_link = f"{settings.BACKEND_URL}/verify-email/{account.verification_token}"
             subject = 'Verify Your Email for FakeDetect'
-            message = f'Hi {user.username},\n\nPlease verify your email by clicking the link below:\n{verification_link}\n\nThank you,\CrediPlus Team'
+            message = f'Hi {user.username},\n\nPlease verify your email by clicking the link below:\n{verification_link}\n\nThank you,\nCrediPlus Team'
             send_mail(
                 subject,
                 message,
@@ -279,3 +279,55 @@ class UserDetailView(APIView):
             return Response(serializer.data)
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class ProductManagementView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+    def delete(self, request, product_id):
+        try:
+            product = Product.objects.get(id=product_id)
+            product.delete()
+            return Response({"message": "Product deleted successfully"}, status=status.HTTP_200_OK)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    def post(self, request, product_id):
+        try:
+            product = Product.objects.get(id=product_id)
+            product.verified_source = not product.verified_source
+            product.save()
+            serializer = ProductSerializer(product)
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class FlagListView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        flags = FlagLists.objects.select_related('customer', 'product').all()
+        serializer = FlagListSerializer(flags, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, flag_id):
+        try:
+            flag = FlagLists.objects.get(id=flag_id)
+            action = request.data.get('action')
+            if action == 'approve':
+                customer = flag.customer
+                customer.points += 10
+                customer.save()
+                flag.status = True
+                flag.save()
+                return Response({"message": "Flag approved, 10 points added to customer"}, status=status.HTTP_200_OK)
+            elif action == 'remove':
+                flag.delete()
+                return Response({"message": "Flag removed"}, status=status.HTTP_200_OK)
+            return Response({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
+        except FlagLists.DoesNotExist:
+            return Response({"error": "Flag not found"}, status=status.HTTP_404_NOT_FOUND)

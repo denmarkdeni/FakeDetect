@@ -49,6 +49,10 @@ urlpatterns = [
     path('api/admin/users/', views.UserManagementView.as_view(), name='user_management'),
     path('api/admin/users/<int:user_id>/', views.UserDetailView.as_view(), name='user_detail'),
     path('api/admin/users/<int:user_id>/toggle/', views.UserManagementView.as_view(), name='toggle_user'),
+    path('api/admin/products/', views.ProductManagementView.as_view(), name='product_management'),
+    path('api/admin/products/<int:product_id>/', views.ProductManagementView.as_view(), name='product_action'),
+    path('api/admin/flags/', views.FlagListView.as_view(), name='flag_list'),
+    path('api/admin/flags/<int:flag_id>/', views.FlagListView.as_view(), name='flag_action'),
 ]
 
 if settings.DEBUG:
