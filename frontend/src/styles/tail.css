@@ -6,14 +6,15 @@
   }
   
   /* Form container styling */
-  .bg-form {
-    background-color: #1e1e2f;
-  }
+ 
   .bg-lite {
     background-color: #ffffff;
   }
   .p-8 {
     padding: 2rem;
+  }
+  .p-4 {
+    padding: 1rem;
   }
   .rounded-form {
     border-radius: 20px;
@@ -239,6 +240,68 @@
     right: 0;
   }
 
+.bg-form {
+  background-color: #1e1e2f; /* Dark gray background */
+  transition: background-color 0.3s ease;
+}
 
+.bg-form:hover {
+  background-color: #142744; /* Slightly lighter on hover */
+}
+
+.rounded-form {
+  border-radius: 0.75rem; /* 12px radius */
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.text-md {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.text-2xl {
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem;
+}
   
+.grid{
+  display: grid;
+}
 

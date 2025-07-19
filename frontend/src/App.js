@@ -20,6 +20,7 @@ import UserDetail from "./components/admin/UserDetail";
 import UserManagement from "./components/admin/UserManagement";
 import ProductManagement from "./components/admin/ProductManagement";
 import FlagList from "./components/admin/FlagList";
+import ReviewPage from "./components/customer/ReviewPage";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/payment-page/:id" element={<PaymentPage />} />
         <Route path="/my-orders" element={<MyOrders />} />
+        <Route path="/my-orders/:orderId/review" element={<ReviewPage />} />
         <Route path="/admin/users" element={<UserManagement />} />
         <Route path="/admin/user/:userId" element={<UserDetail />} />
         <Route path="/admin/products" element={<ProductManagement />} />

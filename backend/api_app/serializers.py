@@ -129,9 +129,10 @@ class CustomerSerializer(serializers.ModelSerializer):
         ]
 
 class ReviewSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='customer.user.username', read_only=True)
     class Meta:
         model = Review
-        fields = ['id', 'customer', 'rating', 'comment', 'created_at']
+        fields = ['id', 'customer','username', 'rating', 'comment', 'created_at']
 
 class FlagListSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='customer.user.username', read_only=True)
@@ -167,5 +168,10 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             'id', 'customer', 'product', 'total_amount', 'status',
-            'created_at'
+            'created_at','reviewed'
         ]
+
+class SubmitReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']

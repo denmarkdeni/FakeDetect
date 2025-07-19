@@ -29,7 +29,10 @@ urlpatterns = [
     path('api/login/', views.LoginView.as_view(), name='login'),
 
     path('api/home/products/', views.HomePageView.as_view(), name='home-products'),
+    path('api/home/reviews/', views.HomeReviewsView.as_view(), name='home_reviews'), 
 
+    path('api/admin/dashboard/', views.AdminDashboardView.as_view(), name='admin_dashboard'),
+    path('api/customer/dashboard/', views.CustomerDashboardView.as_view(), name='customer_dashboard'),
     path('api/seller/profile/', views.SellerProfileView.as_view(), name='seller-profile'),
     path('api/customer/profile/', views.CustomerProfileView.as_view(), name='customer-profile'),
 
@@ -45,6 +48,7 @@ urlpatterns = [
     path('api/payment/<int:pk>/', views.PaymentView.as_view(), name='payment'),
 
     path('api/my-orders/', views.MyOrdersView.as_view(), name='my_orders'),
+    path('api/my-orders/<int:order_id>/review/', views.SubmitReviewView.as_view(), name='submit_review'),
 
     path('api/admin/users/', views.UserManagementView.as_view(), name='user_management'),
     path('api/admin/users/<int:user_id>/', views.UserDetailView.as_view(), name='user_detail'),

@@ -6,12 +6,14 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.models import User
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
-from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists, Payment
-from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer
-from .serializers import CustomerSerializer, CartSerializer, OrderSerializer, FlagListSerializer
+from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists, Payment, Review
+from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer,SubmitReviewSerializer
+from .serializers import CustomerSerializer, CartSerializer, OrderSerializer, FlagListSerializer,ReviewSerializer
 from .serializers import UserManagementSerializer, UserDetailSerializer
 
 class VerifyEmailView(APIView):
@@ -331,3 +333,137 @@ class FlagListView(APIView):
             return Response({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
         except FlagLists.DoesNotExist:
             return Response({"error": "Flag not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class AdminDashboardView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        data = {
+            'customer_count': Customer.objects.count(),
+            'seller_count': Seller.objects.count(),
+            'product_count': Product.objects.count(),
+            'flag_count': FlagLists.objects.count(),
+            'product_reports': self.get_product_reports(),
+            'flag_trends': self.get_flag_trends(),
+        }
+        return Response(data)
+
+    def get_product_reports(self):
+        six_months_ago = timezone.now() - timezone.timedelta(days=180)
+        products = Product.objects.filter(created_at__gte=six_months_ago).annotate(
+            month=TruncMonth('created_at')
+        ).values('month').annotate(
+            total=Count('id')
+        ).order_by('month')
+
+        labels = []
+        counts = []
+        for i in range(6, 0, -1):
+            month_date = (timezone.now() - timezone.timedelta(days=30 * i)).replace(day=1)
+            month_str = month_date.strftime('%b')
+            labels.append(month_str)
+            total = next((p['total'] for p in products if p['month'].month == month_date.month and p['month'].year == month_date.year), 0)
+            counts.append(total)
+
+        return {'labels': labels, 'counts': counts}
+
+    def get_flag_trends(self):
+        six_months_ago = timezone.now() - timezone.timedelta(days=180)
+        flags = FlagLists.objects.filter(created_at__gte=six_months_ago).annotate(
+            month=TruncMonth('created_at')
+        ).values('month').annotate(
+            total=Count('id')
+        ).order_by('month')
+
+        labels = []
+        counts = []
+        for i in range(6, 0, -1):
+            month_date = (timezone.now() - timezone.timedelta(days=30 * i)).replace(day=1)
+            month_str = month_date.strftime('%b')
+            labels.append(month_str)
+            total = next((f['total'] for f in flags if f['month'].month == month_date.month and f['month'].year == month_date.year), 0)
+            counts.append(total)
+
+        return {'labels': labels, 'counts': counts}
+    
+class CustomerDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        customer = request.user.customer
+        data = {
+            'report_count': Product.objects.filter(review__customer=customer).count(),  # Assuming reviews indicate reports
+            'flag_count': FlagLists.objects.filter(customer=customer).count(),
+            'bought_products_count': Order.objects.filter(customer=customer, status='paid').count(),
+            'credit_points': customer.points,
+            'product_reports': self.get_product_reports(customer),
+            'flag_trends': self.get_flag_trends(customer),
+        }
+        return Response(data)
+
+    def get_product_reports(self, customer):
+        six_months_ago = timezone.now() - timezone.timedelta(days=180)
+        products = Product.objects.filter(review__customer=customer, review__created_at__gte=six_months_ago).annotate(
+            month=TruncMonth('review__created_at')
+        ).values('month').annotate(
+            total=Count('id')
+        ).order_by('month')
+
+        labels = []
+        counts = []
+        for i in range(6, 0, -1):
+            month_date = (timezone.now() - timezone.timedelta(days=30 * i)).replace(day=1)
+            month_str = month_date.strftime('%b')
+            labels.append(month_str)
+            total = next((p['total'] for p in products if p['month'].month == month_date.month and p['month'].year == month_date.year), 0)
+            counts.append(total)
+
+        return {'labels': labels, 'counts': counts}
+
+    def get_flag_trends(self, customer):
+        six_months_ago = timezone.now() - timezone.timedelta(days=180)
+        flags = FlagLists.objects.filter(customer=customer, created_at__gte=six_months_ago).annotate(
+            month=TruncMonth('created_at')
+        ).values('month').annotate(
+            total=Count('id')
+        ).order_by('month')
+
+        labels = []
+        counts = []
+        for i in range(6, 0, -1):
+            month_date = (timezone.now() - timezone.timedelta(days=30 * i)).replace(day=1)
+            month_str = month_date.strftime('%b')
+            labels.append(month_str)
+            total = next((f['total'] for f in flags if f['month'].month == month_date.month and f['month'].year == month_date.year), 0)
+            counts.append(total)
+
+        return {'labels': labels, 'counts': counts}
+    
+class HomeReviewsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        reviews = Review.objects.all().order_by('-created_at')[:5]  # Limit to 2 for carousel
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
+    
+class SubmitReviewView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, order_id):
+        try:
+            order = Order.objects.get(id=order_id, customer=request.user.customer)
+            print('error 0')
+            if order.reviewed:
+                return Response({"error": "This order has already been reviewed."}, status=status.HTTP_400_BAD_REQUEST)
+            print('error 01')
+            serializer = SubmitReviewSerializer(data=request.data)
+            if serializer.is_valid():
+                print('error 1')
+                review = serializer.save(customer=request.user.customer, product=order.product)
+                order.reviewed = True
+                order.save()
+                return Response({"message": "Review submitted successfully"}, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Order.DoesNotExist:
+            return Response({"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND)

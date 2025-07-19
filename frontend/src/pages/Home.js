@@ -8,59 +8,8 @@ import axios from "axios";
 
 export default function Home() {
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const loadScript = (src) =>
-  //     new Promise((resolve, reject) => {
-  //       const script = document.createElement("script");
-  //       script.src = src;
-  //       script.async = true;
-  //       script.onload = resolve;
-  //       script.onerror = reject;
-  //       document.body.appendChild(script);
-  //     });
-
-  //   // Load jQuery, then Bootstrap, then Owl Carousel
-  //   Promise.resolve()
-  //     .then(() => loadScript(process.env.PUBLIC_URL +"/assets/js/jquery-3.4.1.min.js"))
-  //     .then(() => loadScript(process.env.PUBLIC_URL +"/assets/js/bootstrap.js"))
-  //     .then(() =>
-  //       loadScript(
-  //         "https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"
-  //       )
-  //     )
-  //     .then(() => {
-  //       // Now jQuery & OwlCarousel are available
-  //       window.$(".owl-carousel").owlCarousel({
-  //         loop: true,
-  //         margin: 10,
-  //         nav: true,
-  //         navText: [],
-  //         autoplay: true,
-  //         responsive: {
-  //           0: { items: 1 },
-  //           600: { items: 2 },
-  //           1000: { items: 4 },
-  //         },
-  //       });
-
-  //       window.$(".owl-2").owlCarousel({
-  //         loop: true,
-  //         margin: 10,
-  //         nav: true,
-  //         navText: [],
-  //         autoplay: true,
-  //         responsive: {
-  //           0: { items: 1 },
-  //           600: { items: 2 },
-  //           1000: { items: 4 },
-  //         },
-  //       });
-  //     })
-  //     .catch((err) => console.error("Script load error:", err));
-  // }, []);
-
   const [products, setProducts] = useState([]);
+  const [reviews, setReviews] = useState([]);
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/api/home/products/")
@@ -70,6 +19,18 @@ export default function Home() {
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
+
+    axios
+      .get('http://127.0.0.1:8000/api/home/reviews/')
+      .then((response) => {
+        setReviews(response.data);
+        console.log(response.data);
+        
+      })
+      .catch((error) => {
+        console.error('Error fetching reviews:', error);
+      });
+
   }, []);
 
   return (
@@ -233,18 +194,6 @@ export default function Home() {
           <div className="feature_container">
             <div className="box">
               <div className="img-box">
-                {/* <svg
-                  version="1.1"
-                  id="Capa_1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                  x="60px"
-                  y="60px"
-                  viewBox="0 0 422.518 422.518"
-                  xmlSpace="preserve"
-                >
-                   <path d="M8 0a8 8 0 1 0 8 8A8.01 8.01 0 0 0 8 0Zm1 12H7v-2h2Zm0-3H7V4h2Z" />
-                </svg> */}
                 <img width="64" height="64" src="https://img.icons8.com/external-tulpahn-outline-color-tulpahn/64/external-fast-delivery-online-shopping-tulpahn-outline-color-tulpahn.png" alt="external-fast-delivery-online-shopping-tulpahn-outline-color-tulpahn"/>
               </div> 
               <div className="detail-box">
@@ -259,15 +208,6 @@ export default function Home() {
 
             <div className="box">
               <div className="img-box">
-                {/* <svg
-                  id="Capa_1"
-                  height="512"
-                  viewBox="0 0 512 512"
-                  width="512"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M159.66 360.3c-7.549-5.03-17.605 2.261-15.18 10.977... (shortened) ..." />
-                </svg> */}
                 <img width="64" height="64" src="https://img.icons8.com/dusk/64/popular-topic.png" alt="popular-topic"/>
               </div>
               <div className="detail-box">
@@ -278,18 +218,6 @@ export default function Home() {
 
             <div className="box">
               <div className="img-box">
-                {/* <svg
-                  version="1.1"
-                  id="Capa_1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                  x="0px"
-                  y="0px"
-                  viewBox="0 0 315.377 315.377"
-                  xmlSpace="preserve"
-                >
-                  <path d="M471.728 84.718H40.272C18.066 84.718 0 102.784 0 125.99v262.023... (TRUNCATED)" />
-                </svg> */}
                 <img width="94" height="94" src="https://img.icons8.com/3d-fluency/94/security-checked.png" alt="security-checked"/>
               </div>
               <div className="detail-box">
@@ -468,75 +396,42 @@ export default function Home() {
           <div className="custom_heading-container">
             <h2>What our clients say</h2>
           </div>
-          <div
-            id="carouselExample2Indicators"
-            className="carousel slide"
-            data-ride="carousel"
-          >
+          <div id="carouselExample2Indicators" className="carousel slide" data-ride="carousel">
             <ol className="carousel-indicators">
-              <li
-                data-target="#carouselExample2Indicators"
-                data-slide-to="0"
-                className="active"
-              ></li>
-              <li
-                data-target="#carouselExample2Indicators"
-                data-slide-to="1"
-              ></li>
+              {reviews.map((_, index) => (
+                <li
+                  key={index}
+                  data-target="#carouselExample2Indicators"
+                  data-slide-to={index}
+                  className={index === 0 ? 'active' : ''}
+                ></li>
+              ))}
             </ol>
             <div className="carousel-inner">
-              <div className="carousel-item active">
-                <div className="client_container layout_padding2">
-                  <div className="client_detail">
-                    <p>
-                      "CrediScan saved me from buying a fake product worth
-                      ₹10,000!"
-                    </p>
-                  </div>
-                  <div className="client_box">
-                    <div className="img-box">
-                      <img src="/assets/images/client.png" alt="" />
+              {reviews.map((review, index) => (
+                <div key={review.id} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                  <div className="client_container layout_padding2">
+                    <div className="client_detail">
+                      <p>"{review.comment}"</p>
                     </div>
-                    <div className="name">
-                      <h5>
-                        -Kendall,
-                        <br />
-                        Bengaluru
-                      </h5>
-                      <h6>
-                        <span>Client</span>
-                        <img src="/assets/images/quote.png" alt="" />
-                      </h6>
+                    <div className="client_box">
+                      <div className="img-box">
+                        <img src="/assets/images/ph1.png" alt="Client" />
+                      </div>
+                      <div className="name">
+                        <h5>
+                          - {review.customer ? review.username || 'Anonymous' : 'Anonymous'}<br />
+                          {/* {review.customer && review.customer.city ? review.customer.city : 'Unknown'} */}
+                        </h5>
+                        <h6>
+                          <span>Client</span>
+                          <img src="/assets/images/quote.png" alt="Quote" />
+                        </h6>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="carousel-item">
-                <div className="client_container layout_padding2">
-                  <div className="client_detail">
-                    <p>
-                      "Super useful! Now I always check with CrediScan before
-                      shopping online."
-                    </p>
-                  </div>
-                  <div className="client_box">
-                    <div className="img-box">
-                      <img src="/assets/images/client.png" alt="" />
-                    </div>
-                    <div className="name">
-                      <h5>
-                        -Shilpa
-                        <br />
-                        Mumbai
-                      </h5>
-                      <h6>
-                        <span>Client</span>
-                        <img src="/assets/images/quote.png" alt="" />
-                      </h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

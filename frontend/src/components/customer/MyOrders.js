@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layout/DashboardLayout";
 import API from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchOrders() {
@@ -22,6 +24,10 @@ function MyOrders() {
 
     fetchOrders();
   }, []);
+
+  const handleReviewClick = (orderId) => {
+    navigate(`/my-orders/${orderId}/review`);
+  };
 
   return (
     <DashboardLayout title={"Orders History"}><br />
@@ -52,6 +58,16 @@ function MyOrders() {
                   <strong>Ordered on:</strong>{" "}
                   {new Date(order.created_at).toLocaleDateString()}
                 </p>
+                {order.reviewed ? (
+                  <p className="text-gray-500">Already reviewed</p>
+                ) : (
+                  <button
+                    onClick={() => handleReviewClick(order.id)}
+                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  >
+                    Review
+                  </button>
+                )}
               </div>
             </div>
           ))}
