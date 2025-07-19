@@ -122,3 +122,21 @@ class FlagLists(models.Model):
     reason = models.CharField(max_length=255)
     status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Voucher(models.Model):
+    name = models.CharField(max_length=100)  # e.g., "10% Discount", "Gift Card $50"
+    code = models.CharField(max_length=50, unique=True)  # Unique voucher code
+    points_cost = models.IntegerField()  # Points required to redeem
+    is_available = models.BooleanField(default=True)  # Track availability
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.code})"
+
+class RedeemedVoucher(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
+    redeemed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('customer', 'voucher')

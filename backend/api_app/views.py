@@ -7,15 +7,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.db.models.functions import TruncMonth
-from django.db.models import Count
+from django.db.models import Count, F
+from django.db import transaction
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
-from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists, Payment, Review
+from .models import Accounts, Seller, Customer, Product, Cart, Order, FlagLists, Payment, Review,Voucher,RedeemedVoucher
 from .serializers import RegisterSerializer, LoginSerializer, SellerSerializer, ProductSerializer,SubmitReviewSerializer
 from .serializers import CustomerSerializer, CartSerializer, OrderSerializer, FlagListSerializer,ReviewSerializer
-from .serializers import UserManagementSerializer, UserDetailSerializer
-
+from .serializers import UserManagementSerializer, UserDetailSerializer,VoucherSerializer,RedeemedVoucherSerializer
 class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
 
@@ -118,9 +118,12 @@ class ProductUploadView(APIView):
 
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
+        seller = request.user.seller
 
         if serializer.is_valid():
-            serializer.save(seller=request.user.seller)  
+            serializer.save(seller=seller)  
+            seller.total_products +=1
+            seller.save()
             return Response({'message': 'Product uploaded successfully!'}, status=201)
         
         return Response(serializer.errors, status=400)
@@ -324,6 +327,9 @@ class FlagListView(APIView):
                 customer = flag.customer
                 customer.points += 10
                 customer.save()
+                seller = flag.product.seller
+                seller.fake_flags +=1
+                seller.save()
                 flag.status = True
                 flag.save()
                 return Response({"message": "Flag approved, 10 points added to customer"}, status=status.HTTP_200_OK)
@@ -467,3 +473,44 @@ class SubmitReviewView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Order.DoesNotExist:
             return Response({"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class VoucherListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        vouchers = Voucher.objects.all()
+        serializer = VoucherSerializer(vouchers, many=True)
+        return Response(serializer.data)
+
+class RedeemVoucherView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, voucher_id):
+        customer = request.user.customer
+        try:
+            with transaction.atomic():
+                voucher = Voucher.objects.select_for_update().get(id=voucher_id, is_available=True)
+                if customer.points < voucher.points_cost:
+                    return Response({"error": "Insufficient points."}, status=status.HTTP_400_BAD_REQUEST)
+                
+                customer.points = F('points') - voucher.points_cost
+                customer.save()
+                voucher.is_available = False
+                voucher.save()
+                redeemed_voucher = RedeemedVoucher.objects.create(customer=customer, voucher=voucher)
+                serializer = RedeemedVoucherSerializer(redeemed_voucher)
+                return Response({"message": "Voucher redeemed successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
+        except Voucher.DoesNotExist:
+            return Response({"error": "Voucher not found or unavailable."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class VoucherAddView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+        serializer = VoucherSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Voucher added successfully"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

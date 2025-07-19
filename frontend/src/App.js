@@ -21,6 +21,8 @@ import UserManagement from "./components/admin/UserManagement";
 import ProductManagement from "./components/admin/ProductManagement";
 import FlagList from "./components/admin/FlagList";
 import ReviewPage from "./components/customer/ReviewPage";
+import VoucherRedeem from "./components/customer/VoucherRedeem";
+import VoucherAdd from "./components/admin/VoucherAdd";
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
         <Route path="/admin/user/:userId" element={<UserDetail />} />
         <Route path="/admin/products" element={<ProductManagement />} />
         <Route path="/admin/flags" element={<FlagList />} />
+        <Route path="/vouchers" element={<VoucherRedeem />} />
+        <Route path="/admin/vouchers/add" element={<VoucherAdd />} />
       </Routes>
     </Router>
   );

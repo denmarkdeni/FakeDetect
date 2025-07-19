@@ -57,6 +57,10 @@ urlpatterns = [
     path('api/admin/products/<int:product_id>/', views.ProductManagementView.as_view(), name='product_action'),
     path('api/admin/flags/', views.FlagListView.as_view(), name='flag_list'),
     path('api/admin/flags/<int:flag_id>/', views.FlagListView.as_view(), name='flag_action'),
+
+    path('api/vouchers/', views.VoucherListView.as_view(), name='voucher_list'),
+    path('api/vouchers/<int:voucher_id>/redeem/', views.RedeemVoucherView.as_view(), name='redeem_voucher'),
+    path('api/admin/vouchers/add/', views.VoucherAddView.as_view(), name='voucher_add'),
 ]
 
 if settings.DEBUG:

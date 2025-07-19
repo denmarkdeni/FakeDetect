@@ -190,7 +190,7 @@ export default function ProductDetails() {
             {product.reviews.map((review) => (
               <li key={review.id}>
                 <p>
-                  <strong>{review.user.username}:</strong> {review.content}
+                  <strong>{review.username}:</strong> {review.content}
                 </p>
                 <p>
                   <strong>Rating:</strong> {review.rating}/5

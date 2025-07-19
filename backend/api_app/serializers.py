@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Accounts, Seller, Customer, Product, Cart, Review, FlagLists, Order, Payment
+from .models import Accounts, Seller, Customer, Product, Cart, Review, FlagLists, Order, Payment, Voucher,RedeemedVoucher
 from django.contrib.auth import authenticate
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
@@ -175,3 +175,17 @@ class SubmitReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['rating', 'comment']
+
+class VoucherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Voucher
+        fields = ['id', 'name', 'code', 'points_cost', 'is_available', 'created_at']
+
+class RedeemedVoucherSerializer(serializers.ModelSerializer):
+    voucher_name = serializers.CharField(source='voucher.name')
+    points_cost = serializers.IntegerField(source='voucher.points_cost')
+
+    class Meta:
+        model = RedeemedVoucher
+        fields = ['id', 'voucher_name', 'points_cost', 'redeemed_at']
+        
